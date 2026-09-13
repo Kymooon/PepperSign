@@ -1,0 +1,577 @@
+/* =========================================================
+   PepperSign - main stylesheet without header/footer
+   Target: tablet first, Android 5.x, old WebView/browser
+   ========================================================= */
+
+html{
+    -webkit-text-size-adjust: 100%;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background: #f4f6f8;
+    color: #333333;
+    font-family: Arial, "Segoe UI", Tahoma, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body,
+input,
+button,
+a,
+video{
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+img{
+    border: 0;
+}
+
+a{
+    color: inherit;
+}
+
+button,
+input{
+    font: inherit;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+.visually-hidden{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.app-shell{
+    width: 100%;
+}
+
+.page,
+.pepper-interaction{
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page{
+    padding: 0 16px 28px 16px;
+}
+
+/* .gestures-section vive dentro .page che ha padding:0 16px,
+   quindi la sua larghezza effettiva è max-width(1080) - 32px = 1048px.
+   Allineiamo .pepper-interaction allo stesso valore. */
+.pepper-interaction{
+    max-width: 1048px;
+}
+
+.card-panel,
+.pepper-interaction,
+.gestures-section{
+    background: #ffffff;
+    border: 1px solid #d9e1e7;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.pepper-interaction{
+    margin-top: 20px;
+    margin-bottom: 18px;
+    padding: 18px;
+}
+
+.pepper-interaction-header{
+    margin-bottom: 12px;
+}
+
+.pepper-interaction-title,
+.pepper-interaction-header h2,
+.section-header h2{
+    margin: 0;
+    color: #212529;
+    font-size: 1.30em;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.pepper-interaction-body{
+    display: block;
+}
+
+.pepper-status-box{
+    margin-bottom: 14px;
+}
+
+.pepper-status-text{
+    margin: 0;
+    color: #243343;
+    font-size: 1.03em;
+    font-weight: 700;
+}
+
+.pepper-status-note{
+    margin: 8px 0 0 0;
+    color: #5d6b7a;
+    font-size: 0.94em;
+}
+
+.pepper-actions{
+    display: block;
+}
+
+.pepper-speak-btn,
+#speakButton,
+.ps-btn,
+.grid-item .try-btn,
+.grid-item .exec-btn{
+    display: inline-block;
+    min-height: 46px;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.98em;
+    font-weight: 800;
+    line-height: 22px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    -webkit-appearance: none;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.pepper-speak-btn,
+#speakButton,
+.ps-btn,
+.grid-item .try-btn{
+    background: #0d6efd;
+    color: #ffffff;
+}
+
+.grid-item .exec-btn{
+    background: #ffffff;
+    color: #0d6efd;
+    border: 2px solid #0d6efd;
+}
+
+.pepper-speak-btn:hover,
+#speakButton:hover,
+.ps-btn:hover,
+.grid-item .try-btn:hover{
+    background: #0b5ed7;
+}
+
+.grid-item .exec-btn:hover{
+    background: #0d6efd;
+    color: #ffffff;
+    border-color: #0d6efd;
+}
+
+.pepper-speak-btn:active,
+#speakButton:active,
+.ps-btn:active,
+.grid-item .try-btn:active,
+.grid-item .exec-btn:active,
+#addButton:active{
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+}
+
+.pepper-speak-btn:disabled,
+#speakButton:disabled,
+.ps-btn:disabled,
+.grid-item .exec-btn:disabled,
+.grid-item .try-btn:disabled{
+    background: #9ca3af;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.72;
+}
+
+.grid-item .exec-btn:disabled,
+.grid-item .exec-btn:disabled:hover,
+.grid-item .exec-btn:disabled:active{
+    background: #9ca3af;
+    color: #ffffff;
+    border: 2px solid #9ca3af;
+}
+
+.speak-icon{
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 1.15em;
+    vertical-align: middle;
+}
+
+.speak-text{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.gestures-section{
+    padding: 18px;
+}
+
+.section-header{
+    margin-bottom: 14px;
+}
+
+.section-header:after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.section-title-wrap{
+    float: left;
+    max-width: 78%;
+}
+
+.section-subtitle{
+    margin: 5px 0 0 0;
+    color: #667484;
+    font-size: 0.94em;
+}
+
+.section-actions{
+    float: right;
+}
+
+#addButton,
+.section-add-btn{
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: #198754;
+    color: #ffffff;
+    border: none;
+    border-radius: 11px;
+    font-size: 1.55em;
+    font-weight: 800;
+    line-height: 44px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    -webkit-appearance: none;
+}
+
+#addButton:hover,
+.section-add-btn:hover{
+    background: #157347;
+}
+
+.media-grid{
+    margin-left: -14px;
+    margin-top: -14px;
+    font-size: 0;
+}
+
+.grid-item{
+    display: inline-block;
+    vertical-align: top;
+    width: 31.333%;
+    margin-left: 14px;
+    margin-top: 14px;
+    background: #ffffff;
+    border: 1px solid #d9e1e7;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.grid-item:hover{
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+}
+
+.grid-item img{
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 150px;
+    max-height: 210px;
+    background: #eef3f7;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.grid-item p{
+    margin: 0;
+    padding: 14px 12px 8px 12px;
+    color: #22303d;
+    font-size: 1em;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.grid-item .try-btn,
+.grid-item .exec-btn{
+    width: auto;
+    min-width: 120px;
+    margin: 0 10px 12px 10px;
+}
+
+.grid-item .pepper-cap-row{
+    margin: 0 10px 10px 10px;
+    text-align: center;
+}
+
+.grid-item .pepper-cap-icon{
+    display: inline-block;
+    margin: 0 4px;
+    font-size: 1.05em;
+    line-height: 1;
+}
+
+.grid-item .pepper-cap-icon.on{
+    opacity: 1;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.grid-item .pepper-cap-icon.off{
+    opacity: 0.35;
+}
+
+.loading-state,
+.empty-state{
+    margin: 0;
+    padding: 20px 10px;
+    color: #657384;
+    font-size: 1em;
+}
+
+.modal{
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.92);
+    text-align: center;
+}
+
+.modal:before{
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#videoPlayer{
+    display: inline-block;
+    vertical-align: middle;
+    width: 92%;
+    max-width: 960px;
+    max-height: 88%;
+    background: #000000;
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(0,0,0,0.55);
+}
+
+.close-btn{
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: rgba(255,255,255,0.14);
+    color: #ffffff;
+    border: none;
+    border-radius: 11px;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 44px;
+    text-align: center;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+.close-btn:hover{
+    background: rgba(255,255,255,0.22);
+}
+
+.ps-form-grid{
+    max-width: 780px;
+    padding: 12px;
+}
+
+.ps-form-grid label{
+    display: block;
+    margin: 10px 0 6px 0;
+    color: #1f2937;
+    font-weight: 800;
+}
+
+.ps-input{
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    background: #ffffff;
+    color: #1f2937;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 12px;
+    outline: none;
+}
+
+.ps-input:focus{
+    border-color: #0f8dca;
+    box-shadow: 0 0 0 3px rgba(17,170,238,0.18);
+}
+
+.ps-hint{
+    padding: 0 12px 12px 12px;
+    color: #4c5a69;
+    font-weight: 600;
+}
+
+@media (min-width: 700px){
+    .pepper-interaction-body{
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+    }
+
+    .pepper-status-box{
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        margin-right: 20px;
+        margin-bottom: 0;
+    }
+
+    .pepper-actions{
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 980px){
+    .grid-item{
+        width: 47%;
+    }
+}
+
+@media (max-width: 699px){
+    .section-title-wrap,
+    .section-actions{
+        float: none;
+        max-width: none;
+    }
+
+    .section-actions{
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 620px){
+    .page{
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .pepper-interaction,
+    .gestures-section{
+        padding: 14px;
+    }
+
+    /* Su schermi stretti max-width non scatta: usiamo margini laterali
+       uguali al padding di .page per allineare i due card */
+    .pepper-interaction{
+        margin-left: 12px;
+        margin-right: 12px;
+    }
+
+    .grid-item{
+        width: 100%;
+    }
+
+    .grid-item img{
+        min-height: 0;
+    }
+
+    .speak-text{
+        display: none;
+    }
+}
+
+/* INFO BUTTON */
+
+.title-with-info{
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.title-with-info h2,
+.title-with-info .pepper-interaction-title{
+    margin: 0;
+}
+
+.info-btn {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 9px;
+    background: #0dcaf0;
+    color: #000000;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 28px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-appearance: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.16);
+}
+
+.info-btn:hover {
+    background: #31d2f2;
+}
+
+.info-btn:active {
+    -webkit-transform: scale(0.95);
+    transform: scale(0.95);
+}
+
+@media (max-width: 620px){
+    .title-with-info{
+        gap: 6px;
+    }
+
+    .info-btn{
+        width: 26px;
+        height: 26px;
+        font-size: 14px;
+        line-height: 26px;
+    }
+}

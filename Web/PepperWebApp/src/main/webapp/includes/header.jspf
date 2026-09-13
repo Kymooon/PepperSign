@@ -1,0 +1,35 @@
+<header class="site-header" role="banner">
+    <div class="site-header-inner">
+        <div class="site-header-brand">
+            <a class="site-header-home-link" href="<%= request.getContextPath() %>/index.jsp" aria-label="Torna alla home">
+                <img
+                        class="site-header-logo-image"
+                        src="<%= request.getContextPath() %>/images/peppersign-logo.png"
+                        alt="PepperSign"
+                >
+            </a>
+
+        </div>
+
+        <div class="site-header-search">
+            <label class="visually-hidden" for="searchInput">Cerca gesto</label>
+            <div class="site-header-search-wrap">
+                <input
+                        type="text"
+                        id="searchInput"
+                        class="site-header-search-input"
+                        placeholder="Cerca Gesto..."
+                        autocomplete="off"
+                        aria-controls="mediaGrid"
+                >
+            </div>
+        </div>
+
+        <nav class="site-header-actions" aria-label="Collegamenti principali">
+            <a class="site-header-icon-link" href="<%= request.getContextPath() %>/admin.jsp" aria-label="Impostazioni" title="Impostazioni">
+                <span class="site-header-gear" aria-hidden="true">&#9881;</span>
+                <span class="visually-hidden">Impostazioni</span>
+            </a>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,43 @@
+<div id="welcomeModal" class="welcome-modal" aria-hidden="true">
+    <div class="welcome-modal-backdrop"></div>
+
+    <div class="welcome-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle">
+        <div class="welcome-modal-panel">
+            <div class="welcome-modal-header">
+                <h2 id="welcomeModalTitle">Benvenuto in PepperSign</h2>
+                <p id="welcomeModalMessage" class="welcome-modal-message">
+                    &Egrave; la prima volta che apri il sito. Pepper ti d&agrave; il benvenuto e pu&ograve; accompagnarti con una breve introduzione iniziale.
+                </p>
+            </div>
+
+            <div class="welcome-modal-body">
+                <div class="welcome-modal-question">
+                    Vuoi una breve introduzione al sito?
+                </div>
+
+                <div id="welcomeChoiceActions" class="welcome-modal-actions">
+                    <button id="welcomeYesBtn" class="welcome-primary-btn" type="button">S&igrave;, mostrami l'introduzione</button>
+                    <button id="welcomeNoBtn" class="welcome-secondary-btn" type="button">No, entra direttamente</button>
+                </div>
+
+                <div id="welcomeIntroSection" class="welcome-intro-section">
+                    <p class="welcome-intro-text">
+                        Qui potrai inserire il tuo video introduttivo e la futura sequenza guidata di Pepper con parole e gesti.
+                    </p>
+
+                    <video id="welcomeIntroVideo" class="welcome-intro-video" controls playsinline preload="metadata">
+                        <source src="<%= request.getContextPath() %>/media/intro_sito.mp4" type="video/mp4">
+                    </video>
+
+                    <p id="welcomeIntroHint" class="welcome-intro-hint">
+                        Se il file <strong>intro_sito.mp4</strong> non &egrave; ancora presente, il video non verr&agrave; riprodotto. Potrai sostituirlo pi&ugrave; avanti con il tuo contenuto definitivo.
+                    </p>
+
+                    <div class="welcome-modal-actions welcome-modal-actions-final">
+                        <button id="welcomeEnterSiteBtn" class="welcome-primary-btn" type="button">Entra nel sito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+https://<192.168.0.108>:8443 {
+
+  tls internal
+
+  @api path /process* /try* /transcribe /health
+  handle @api {
+    reverse_proxy 127.0.0.1:5000
+  }
+
+  handle {
+    reverse_proxy 127.0.0.1:8080
+  }
+}

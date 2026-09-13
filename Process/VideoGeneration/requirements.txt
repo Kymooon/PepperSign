@@ -1,0 +1,13 @@
+flask
+flask-cors
+loguru
+tqdm
+numpy
+opencv-python
+imageio
+torch
+easy-dwpose
+# opzionale (più veloce):
+faster-whisper
+# se usi openai-whisper:
+whisper

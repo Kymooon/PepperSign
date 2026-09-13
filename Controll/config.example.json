@@ -1,0 +1,9 @@
+{
+    "robot": {
+        "ip": "192.168.X.X",
+        "port": 9559
+    },
+    "webapp": {
+        "base_url": "http://HOST_IP:8080/PepperSign_Web_war_exploded"
+    }
+}

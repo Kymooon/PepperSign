@@ -1,0 +1,93 @@
+﻿# ==========================================
+# PepperSign - Git Ignore
+# ==========================================
+
+# --------------------------
+# Python
+# --------------------------
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# --------------------------
+# IDE
+# --------------------------
+.idea/
+.vscode/
+*.iml
+
+# --------------------------
+# Local PepperSign config
+# --------------------------
+config.local.json
+
+# --------------------------
+# Environment variables
+# --------------------------
+.env
+.env.local
+.env.*.local
+
+# --------------------------
+# Runtime generated files
+# --------------------------
+snapshots/
+*.log
+*.tmp
+*.temp
+
+# Temporary PepperSign files
+**/_tmp_*/
+
+# --------------------------
+# Old / backup code
+# --------------------------
+old-version/
+
+# --------------------------
+# Machine Learning models
+# --------------------------
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.safetensors
+
+# HuggingFace / ML cache
+.cache/
+**/.cache/
+**/huggingface/
+
+# --------------------------
+# Java / Maven / Tomcat
+# --------------------------
+target/
+*.class
+
+# --------------------------
+# Certificates and private keys
+# --------------------------
+*.p12
+*.pfx
+*.pem
+*.key
+
+# --------------------------
+# Operating system files
+# --------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --------------------------
+# Docker local configuration
+# --------------------------
+compose.override.yaml
+docker-compose.override.yml
