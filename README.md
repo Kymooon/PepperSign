@@ -19,24 +19,78 @@ Tablet / PC ──HTTPS──► Caddy ──► Web (Tomcat) ──HTTP──�
                               Controll (Python 2.7) ──NAOqi──► Pepper
 ```
 
-## Avvio rapido (Docker)
+## Installazione su un nuovo PC
 
-Requisiti: [Docker Desktop](https://docs.docker.com/desktop/) e l'SDK NAOqi Python 2.7 per **Linux 64 bit** in `Controll/docker/sdk/` (vedi [README dell'SDK](Controll/docker/sdk/README.md)).
+### 1. Requisiti
+- [Git](https://git-scm.com/download/win)
+- [Docker Desktop](https://docs.docker.com/desktop/) con backend **WSL2**, avviato fino alla scritta *Engine running*
+- Circa 15 GB liberi su disco (immagini Docker e modelli)
+- *Opzionale:* scheda NVIDIA con driver aggiornati, per usare la GPU
+- *Opzionale:* il robot Pepper sulla stessa rete del PC
 
+### 2. Clonare il repository
+```bat
+git clone https://github.com/Kymooon/PepperSign.git
+cd PepperSign
 ```
-copy .env.example .env          (poi imposta PEPPER_IP, oppure PEPPERSIGN_FAKE_ROBOT=1 per la demo)
+
+### 3. Copiare l'SDK NAOqi (solo per il modulo Controll)
+L'SDK non è nel repository perché la licenza non ne consente la ridistribuzione. Copia il file `pynaoqi-python2.7-2.8.7.4-linux64-*.tar.gz` (versione **Linux 64 bit**, non quella Windows) in `Controll/docker/sdk/`, **senza estrarlo**. Dettagli in [Controll/docker/sdk/README.md](Controll/docker/sdk/README.md).
+
+> Se non hai l'SDK puoi comunque usare la WebApp e il servizio Python: vedi la variante "senza Controll" al passo 5.
+
+### 4. Creare il file di configurazione
+```bat
+copy .env.example .env
+```
+Apri `.env` con un editor di testo e imposta:
+
+| Variabile | Valore |
+|---|---|
+| `PEPPER_IP` | IP del robot (lo dice Pepper premendo il pulsante sul petto) |
+| `PEPPERSIGN_FAKE_ROBOT` | `1` per provare senza robot, `0` con il robot reale |
+| `VNC_PASSWORD` | consigliata in laboratorio: senza password chiunque sulla rete può comandare il robot |
+
+`PEPPERSIGN_HOST` non serve toccarlo: lo script di avvio rileva da solo l'IP del PC.
+
+### 5. Primo avvio
+Dalla cartella del progetto:
+```bat
 avvia-peppersign.bat -Build
 ```
+La prima volta richiede parecchi minuti: scarica le immagini base, PyTorch e i modelli DWPose (circa 350 MB).
 
+| Variante | Comando |
+|---|---|
+| Senza SDK NAOqi (niente Controll) | `avvia-peppersign.bat -Build -Services web,process,caddy` |
+| Con GPU NVIDIA | `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d --build` |
+| IP rilevato sbagliato | `avvia-peppersign.bat -Build -Ip 192.168.x.x` |
+
+### 6. Verificare che sia tutto acceso
+```bat
+docker compose ps
+```
+Tutti i container devono risultare *running*, e `process` deve risultare *healthy* (al primo avvio può impiegare un paio di minuti).
+
+### 7. Aprire il sistema
 | Cosa | Indirizzo |
 |---|---|
-| WebApp da tablet o altri dispositivi | `https://<IP-del-PC>:8443/` |
-| WebApp dal PC | `http://localhost:8080/PepperSign/` |
-| GUI del controller (robot) | `http://localhost:6080` |
+| WebApp dal tablet di Pepper o da altri dispositivi | `https://<IP-del-PC>:8443/` |
+| WebApp dal PC stesso | `http://localhost:8080/PepperSign/` |
+| GUI del controller del robot | `http://localhost:6080` → *Connect* |
 
-Senza robot: `PEPPERSIGN_FAKE_ROBOT=1` nel `.env` attiva un Pepper simulato.
+- Al primo accesso in HTTPS il browser mostra un avviso sul certificato: va accettato. L'HTTPS serve perché il tablet possa usare microfono e webcam.
+- Se il tablet non si collega, apri la porta **8443** nel firewall di Windows.
 
-La guida completa è in **[DOCKER.md](DOCKER.md)**: GPU, dati, variabili, problemi noti.
+### 8. Uso quotidiano
+| Azione | Comando |
+|---|---|
+| Avviare | doppio clic su `avvia-peppersign.bat` |
+| Fermare | `docker compose down` (i dati in `data/` restano) |
+| Aggiornare dopo un `git pull` | `avvia-peppersign.bat -Build` |
+| Vedere i log | `docker compose logs -f process` oppure `docker compose logs -f controll` |
+
+Problemi frequenti, GPU e tutte le variabili di configurazione: **[DOCKER.md](DOCKER.md)**.
 
 ## Struttura della repository
 

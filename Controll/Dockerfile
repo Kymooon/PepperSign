@@ -5,7 +5,7 @@
 # visibile da browser tramite noVNC:  http://<host>:6080
 #
 # PREREQUISITO: l'SDK Python di NAOqi per Linux 64 bit
-# (pynaoqi-python2.7-2.5.x-linux64.tar.gz) va copiato in
+# (pynaoqi-python2.7-2.8.7.4-linux64-*.tar.gz) va copiato in
 # Controll/docker/sdk/  (vedi docker/sdk/README.md).
 # ==========================================================
 FROM ubuntu:18.04

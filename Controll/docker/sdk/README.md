@@ -3,16 +3,16 @@
 Il container del modulo Controll ha bisogno dell'SDK Python di NAOqi **per Linux a 64 bit**.
 Quello che usi oggi su Windows non va bene: serve la versione Linux.
 
-1. Scarica dal sito di Aldebaran/SoftBank (area download / supporto di Pepper, NAOqi 2.5)
+1. Scarica dal sito di Aldebaran/SoftBank (area download / supporto di Pepper)
    il file:
 
-   `pynaoqi-python2.7-2.5.x-linux64.tar.gz`   (es. `pynaoqi-python2.7-2.5.7.1-linux64.tar.gz`)
+   `pynaoqi-python2.7-<versione>-linux64-<data>.tar.gz`   (in uso: `pynaoqi-python2.7-2.8.7.4-linux64-20210819_141148.tar.gz`)
 
-   Usa la stessa versione 2.5.x di NAOqi installata sul tuo Pepper.
+   La versione in uso nel progetto è la 2.8.7.4.
 
 2. Copia il file **così com'è** (senza estrarlo) in questa cartella:
 
-   `Controll/docker/sdk/pynaoqi-python2.7-2.5.x-linux64.tar.gz`
+   `Controll/docker/sdk/pynaoqi-python2.7-2.8.7.4-linux64-20210819_141148.tar.gz`
 
 3. Ricostruisci il container:
 
