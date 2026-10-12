@@ -1,0 +1,28 @@
+# PepperSign - punto d'ingresso HTTPS
+#
+# Il browser (tablet di Pepper, PC, smartphone) permette microfono e webcam
+# solo in un contesto sicuro: per questo la WebApp e' servita in HTTPS.
+# Il certificato e' emesso dalla CA interna di Caddy ("tls internal"):
+# al primo accesso il browser mostrera' un avviso da accettare.
+#
+# PEPPERSIGN_HOST = IP o nome con cui gli altri dispositivi raggiungono
+# questo computer (es. 192.168.137.1). Si imposta nel file .env.
+
+{
+	# Niente installazione della CA nel sistema (siamo in un container)
+	skip_install_trust
+	# Molti client che si collegano via IP non inviano l'SNI:
+	# in quel caso Caddy usa il certificato di questo host.
+	default_sni {$PEPPERSIGN_HOST}
+}
+
+https://{$PEPPERSIGN_HOST}:8443 {
+	tls internal
+
+	# La home porta direttamente all'applicazione.
+	redir / /PepperSign/ 302
+
+	# Tutto passa per Tomcat: le API verso Python (ASR, generazione,
+	# prova gesto) sono gia' inoltrate dalle servlet.
+	reverse_proxy web:8080
+}

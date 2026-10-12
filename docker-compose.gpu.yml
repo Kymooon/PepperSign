@@ -1,0 +1,25 @@
+# ==========================================================
+# Variante GPU NVIDIA per il modulo Process.
+# Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d --build
+#
+# Requisiti: driver NVIDIA aggiornati e Docker Desktop con backend WSL2
+# (su Linux: NVIDIA Container Toolkit).
+# CUDA 12.4 + cuDNN 9 sono compatibili con torch cu124, onnxruntime-gpu
+# e faster-whisper (CTranslate2 4.x).
+# ==========================================================
+services:
+  process:
+    build:
+      args:
+        BASE_IMAGE: nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
+        TORCH_INDEX_URL: https://download.pytorch.org/whl/cu124
+        ONNXRUNTIME_PACKAGE: onnxruntime-gpu
+    image: peppersign/process:gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

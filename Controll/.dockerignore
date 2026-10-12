@@ -1,0 +1,10 @@
+.idea/
+old-version/
+snapshots/
+packages/
+__pycache__/
+*.pyc
+config.local.json
+config.json
+Dockerfile
+.dockerignore

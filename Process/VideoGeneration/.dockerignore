@@ -1,0 +1,9 @@
+checkpoints/
+assets/_tmp_*/
+.idea/
+__pycache__/
+*.pyc
+*.onnx
+*.log
+Dockerfile
+.dockerignore

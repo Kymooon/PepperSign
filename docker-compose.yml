@@ -1,0 +1,110 @@
+# ==========================================================
+# PepperSign - avvio completo con Docker
+#
+#   1) copia .env.example in .env e imposta gli IP
+#   2) docker compose up -d --build
+#
+#   WebApp (HTTPS) : https://<PEPPERSIGN_HOST>:8443/PepperSign/
+#   WebApp (HTTP)  : http://localhost:8080/PepperSign/
+#   GUI Controll   : http://localhost:6080
+#
+# GPU NVIDIA: docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d --build
+# Dettagli: DOCKER.md
+# ==========================================================
+
+name: peppersign
+
+services:
+
+  # ---------- Modulo Web: Tomcat + JSP + API ----------
+  web:
+    build: ./Web/PepperWebApp
+    image: peppersign/web:latest
+    restart: unless-stopped
+    environment:
+      PEPPERSIGN_PROCESS_URL: http://process:5000
+      PEPPERSIGN_DATA_DIR: /data/media
+    volumes:
+      - ${PEPPERSIGN_MEDIA_DIR:-./data/media}:/data/media
+    ports:
+      - "${WEB_HTTP_PORT:-8080}:8080"
+    depends_on:
+      - process
+
+  # ---------- Modulo Process: Flask + DWPose + Whisper ----------
+  process:
+    build:
+      context: ./Process/VideoGeneration
+    image: peppersign/process:cpu
+    restart: unless-stopped
+    environment:
+      PEPPERSIGN_DATA_DIR: /data/media
+      GPU_CONCURRENCY: ${GPU_CONCURRENCY:-1}
+      ASR_CONCURRENCY: ${ASR_CONCURRENCY:-1}
+      ASR_MODEL: ${ASR_MODEL:-base}
+      TRY_SCORE_THRESHOLD: ${TRY_SCORE_THRESHOLD:-0.65}
+      TRY_TTL_SECONDS: ${TRY_TTL_SECONDS:-900}
+    volumes:
+      - ${PEPPERSIGN_MEDIA_DIR:-./data/media}:/data/media
+      # modelli DWPose (.onnx): se la cartella e' vuota vengono scaricati al primo avvio
+      - ./Process/VideoGeneration/checkpoints:/app/checkpoints
+      # video sorgente locali opzionali (es. acqua.mp4)
+      - ./Process/VideoGeneration/assets:/app/assets
+      # cache dei modelli Whisper/HuggingFace (evita di riscaricarli)
+      - model-cache:/root/.cache
+    # Porta non esposta di default: la WebApp la raggiunge sulla rete interna.
+    # Per debug togli il commento:
+    # ports:
+    #   - "5000:5000"
+
+  # ---------- Modulo Controll: robot Pepper (Python 2.7 + NAOqi) ----------
+  controll:
+    build: ./Controll
+    image: peppersign/controll:latest
+    restart: unless-stopped
+    environment:
+      PEPPERSIGN_ROBOT_IP: ${PEPPER_IP:-}
+      PEPPERSIGN_ROBOT_PORT: ${PEPPER_PORT:-9559}
+      PEPPERSIGN_WEBAPP_URL: http://web:8080/PepperSign
+      # Servizio Process per i "Frame da coordinate" (beta) della GUI
+      PEPPERSIGN_PROCESS_URL: http://process:5000
+      PEPPERSIGN_GESTURE_DIR: /data/gestures
+      PEPPERSIGN_ROBOT_WAIT: "86400"
+      PEPPERSIGN_TTS_LANGUAGE: ${PEPPER_TTS_LANGUAGE:-Italian}
+      # 1 = modalita' demo: robot simulato, non serve Pepper (vedi DOCKER.md)
+      PEPPERSIGN_FAKE_ROBOT: ${PEPPERSIGN_FAKE_ROBOT:-0}
+      # Autonomia durante i gesti: pause | off | none (vedi DOCKER.md)
+      PEPPERSIGN_GESTURE_AUTONOMY: ${PEPPERSIGN_GESTURE_AUTONOMY:-pause}
+      # Attese (s) prima e dopo ogni gesto, con i movimenti autonomi in pausa
+      PEPPERSIGN_GESTURE_PRE_DELAY: ${PEPPERSIGN_GESTURE_PRE_DELAY:-0.8}
+      PEPPERSIGN_GESTURE_POST_DELAY: ${PEPPERSIGN_GESTURE_POST_DELAY:-0.6}
+      # Dimensioni del desktop virtuale (noVNC) e della finestra della GUI
+      SCREEN_GEOMETRY: ${CONTROLL_SCREEN:-1920x1080x24}
+      PEPPERSIGN_WINDOW_SIZE: ${CONTROLL_WINDOW_SIZE:-1900x1040}
+      VNC_PASSWORD: ${VNC_PASSWORD:-}
+    volumes:
+      - ${PEPPERSIGN_GESTURES_DIR:-./data/gestures}:/data/gestures
+    ports:
+      - "${CONTROLL_GUI_PORT:-6080}:6080"
+    depends_on:
+      - web
+
+  # ---------- Reverse proxy HTTPS ----------
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      PEPPERSIGN_HOST: ${PEPPERSIGN_HOST:-localhost}
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    ports:
+      - "${HTTPS_PORT:-8443}:8443"
+    depends_on:
+      - web
+
+volumes:
+  model-cache:
+  caddy-data:
+  caddy-config:
