@@ -28,9 +28,8 @@ import java.util.regex.Pattern;
 @WebServlet("/api/generate")
 public class GenerateServlet extends HttpServlet {
 
-    private static final String DEFAULT_MEDIA_OUTPUT_DIR =
-            System.getProperty("user.home") + File.separator + "PepperSignData";
-    private static final String DEFAULT_PYTHON_API_URL = "http://127.0.0.1:5000/process";
+    private static final String DEFAULT_MEDIA_OUTPUT_DIR = AppConfig.dataDir();
+    private static final String DEFAULT_PYTHON_API_URL = AppConfig.processUrl("/process");
 
     private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))

@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 @WebServlet("/api/lesson")
 public class LessonServlet extends HttpServlet {
 
-    private static final String DEFAULT_PYTHON_API_URL = "http://127.0.0.1:5000/process";
+    private static final String DEFAULT_PYTHON_API_URL = AppConfig.processUrl("/process");
     private static final Gson GSON = new Gson();
     private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
@@ -49,7 +49,7 @@ public class LessonServlet extends HttpServlet {
         if (configured != null && !configured.trim().isEmpty()) {
             return Paths.get(configured.trim());
         }
-        return Paths.get(System.getProperty("user.home"), "PepperSignData");
+        return Paths.get(AppConfig.dataDir());
     }
 
     private String getPythonApiUrl() {

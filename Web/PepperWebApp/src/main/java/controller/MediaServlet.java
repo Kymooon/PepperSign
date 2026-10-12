@@ -19,8 +19,7 @@ import java.util.Locale;
 @WebServlet("/media/*")
 public class MediaServlet extends HttpServlet {
 
-    private static final String DEFAULT_BASE_PATH =
-            System.getProperty("user.home") + File.separator + "PepperSignData";
+    private static final String DEFAULT_BASE_PATH = AppConfig.dataDir();
 
     private String getBasePath() {
         String configured = getServletConfig() != null ? getServletConfig().getInitParameter("mediaBasePath") : null;

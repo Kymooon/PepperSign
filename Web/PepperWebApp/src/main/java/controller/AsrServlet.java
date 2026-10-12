@@ -19,7 +19,7 @@ import java.util.Map;
 public class AsrServlet extends HttpServlet {
 
     // Flask ASR service (nuovo)
-    private static final String ASR_API_URL = "http://127.0.0.1:5000/transcribe";
+    private static final String ASR_API_URL = AppConfig.processUrl("/transcribe");
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -47,7 +47,7 @@ public class AsrServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "Errore comunicazione con ASR Flask. È avviato su :5001?");
+                    "Errore comunicazione con il servizio ASR (" + ASR_API_URL + "). È avviato?");
         } finally {
             Files.deleteIfExists(tempFile);
         }

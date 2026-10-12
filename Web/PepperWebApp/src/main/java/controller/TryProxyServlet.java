@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 @MultipartConfig
 public class TryProxyServlet extends HttpServlet {
 
-    private static final String DEFAULT_TRY_BASE = "http://127.0.0.1:5000";
+    private static final String DEFAULT_TRY_BASE = AppConfig.processBaseUrl();
 
     private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
     private static final Duration POST_TIMEOUT = Duration.ofSeconds(120);

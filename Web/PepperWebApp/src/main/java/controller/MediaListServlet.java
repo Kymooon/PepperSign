@@ -25,8 +25,7 @@ public class MediaListServlet extends HttpServlet {
 
     private static final Gson GSON = new Gson();
 
-    private static final String DEFAULT_MEDIA_DIR_PATH =
-            System.getProperty("user.home") + File.separator + "PepperSignData";
+    private static final String DEFAULT_MEDIA_DIR_PATH = AppConfig.dataDir();
 
     private String getMediaDirPath() {
         String configured = getServletConfig() != null ? getServletConfig().getInitParameter("mediaDirPath") : null;

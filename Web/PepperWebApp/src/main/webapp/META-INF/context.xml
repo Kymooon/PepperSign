@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    I media (/media/*) sono serviti da MediaServlet, che legge dalla cartella
+    indicata dalla variabile d'ambiente PEPPERSIGN_DATA_DIR (vedi AppConfig).
+    La vecchia mappatura su C:\multimedia_data e' stata rimossa: non era usata
+    (MediaServlet ha la precedenza) e bloccava l'avvio di Tomcat su Linux/Docker,
+    dove quella cartella non esiste.
+-->
 <Context>
-    <Resources cachingAllowed="true" alias="/media">
-        <PreResources
-                className="org.apache.catalina.webresources.DirResourceSet"
-                base="C:\multimedia_data"
-                webAppMount="/media"
-        />
-    </Resources>
 </Context>
