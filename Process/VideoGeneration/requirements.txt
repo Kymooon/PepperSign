@@ -1,13 +1,26 @@
+# Dipendenze del servizio Process (Python 3.10+).
+#
+# torch e onnxruntime NON sono qui: dipendono dalla variante CPU/GPU e
+# vengono installati dal Dockerfile (vedi ARG TORCH_INDEX_URL / ONNXRUNTIME_PACKAGE).
+# Installazione manuale senza Docker:
+#   CPU: pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install onnxruntime
+#   GPU: pip install torch --index-url https://download.pytorch.org/whl/cu121 && pip install onnxruntime-gpu
+#   poi: pip install -r requirements.txt
+
 flask
 flask-cors
+gunicorn
+requests
 loguru
 tqdm
 numpy
 opencv-python
 imageio
-torch
-easy-dwpose
-# opzionale (più veloce):
+imageio-ffmpeg
+pillow
+# easy-dwpose viene installato dal Dockerfile (passo 2b): su Linux
+# richiede onnxruntime-gpu==1.16.2, non disponibile.
+# Installazione manuale: pip install --no-deps easy-dwpose + le sue dipendenze
+
+# ASR (consigliato, piu' veloce). In alternativa: openai-whisper
 faster-whisper
-# se usi openai-whisper:
-whisper

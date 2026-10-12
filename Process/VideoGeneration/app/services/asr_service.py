@@ -70,7 +70,8 @@ def init_asr():
         dev = "cuda" if torch.cuda.is_available() else "cpu"
         compute = "float16" if dev == "cuda" else "int8"
 
-        model = WhisperModel("base", device=dev, compute_type=compute)
+        model_name = os.environ.get("ASR_MODEL", "base")
+        model = WhisperModel(model_name, device=dev, compute_type=compute)
         logger.info("[ASR] faster-whisper pronto (device={}, compute={})", dev, compute)
 
         return {
@@ -84,8 +85,9 @@ def init_asr():
     try:
         import whisper
 
-        model = whisper.load_model("base")
-        logger.info("[ASR] openai-whisper pronto (model=base)")
+        model_name = os.environ.get("ASR_MODEL", "base")
+        model = whisper.load_model(model_name)
+        logger.info("[ASR] openai-whisper pronto (model={})", model_name)
 
         return {
             "engine": "openai-whisper",

@@ -14,6 +14,7 @@ from .routes.process import bp as process_bp
 from .routes.try_gesture import bp as try_bp
 from .routes.whisper import bp as whisper_bp
 from .routes.health import bp as health_bp
+from .routes.retarget_pose import bp as retarget_pose_bp
 from flask_cors import CORS
 
 def create_app():
@@ -49,5 +50,6 @@ def create_app():
     app.register_blueprint(try_bp)
     app.register_blueprint(whisper_bp)
     app.register_blueprint(health_bp)
+    app.register_blueprint(retarget_pose_bp)   # frame da coordinate (beta, usato dalla GUI di Controll)
 
     return app
