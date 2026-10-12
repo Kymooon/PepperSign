@@ -91,3 +91,21 @@ desktop.ini
 # --------------------------
 compose.override.yaml
 docker-compose.override.yml
+
+# --------------------------
+# Docker
+# --------------------------
+# Dati runtime montati nei container
+data/
+# SDK NAOqi (licenza: non ridistribuibile)
+Controll/docker/sdk/*.tar.gz
+
+# --------------------------
+# Archivio locale (codice e file storici, non versionati)
+# --------------------------
+_archivio/
+
+# --------------------------
+# Output di lavoro di Claude (immagini di confronto, note)
+# --------------------------
+Claude outputs/

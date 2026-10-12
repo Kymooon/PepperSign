@@ -1,0 +1,23 @@
+# Fine riga per i file usati dentro i container Linux: sempre LF,
+# anche quando la repository viene clonata su Windows.
+Dockerfile          text eol=lf
+*.sh                text eol=lf
+*.conf              text eol=lf
+Caddyfile           text eol=lf
+*.yml               text eol=lf
+*.yaml              text eol=lf
+.env.example        text eol=lf
+
+# Script di avvio Windows: sempre CRLF
+*.bat               text eol=crlf
+*.ps1               text eol=crlf
+
+# File binari
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.mp4    binary
+*.jar    binary
+*.onnx   binary
+*.tar.gz binary
+*.zip    binary
