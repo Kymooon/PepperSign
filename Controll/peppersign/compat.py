@@ -27,6 +27,14 @@ except Exception:
     ttk = None
 
 try:
+    import tkMessageBox
+except ImportError:
+    try:
+        from tkinter import messagebox as tkMessageBox
+    except Exception:
+        tkMessageBox = None
+
+try:
     import Queue as queue
 except Exception:
     import queue

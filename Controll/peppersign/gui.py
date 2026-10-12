@@ -4,16 +4,11 @@ from __future__ import absolute_import
 import copy
 import os
 import threading
+import time
 
-from peppersign.compat import queue, tk, tkFileDialog, ttk
+from peppersign.compat import queue, tk, tkFileDialog, tkMessageBox, ttk
 from peppersign.gesture_store import DEFAULT_JOINTS
 from peppersign.utils import ensure_dir, now_stamp, read_json, safe_unicode
-
-import os
-os.environ['TCL_LIBRARY'] = r'C:\Python27\tcl\tcl8.5'
-os.environ['TK_LIBRARY'] = r'C:\Python27\tcl\tk8.5'
-
-import Tkinter as tk
 
 
 # Coppie usate per duplicare/specchiare la posa di un braccio sull'altro.
@@ -137,66 +132,252 @@ class PepperGUI(object):
         thread.daemon = True
         thread.start()
 
+    # ------------------------------------------------------------------
+    # Layout: pannelli a schede (Stato / Comandi / Registrazione segni)
+    # con il log sempre visibile nella parte bassa della finestra.
+    # ------------------------------------------------------------------
+
     def _build(self):
-        frm_status = tk.Frame(self.root)
-        frm_status.pack(fill="x", padx=10, pady=8)
+        self.var_mode = tk.StringVar()
+        self.var_gesture_count = tk.StringVar()
+        self.var_autonomy = tk.StringVar()
+        self.var_connection = tk.StringVar(value="NON CONNESSO")
 
-        tk.Label(frm_status, text="Robot:").grid(row=0, column=0, sticky="w")
-        tk.Label(frm_status, textvariable=self.var_robot).grid(row=0, column=1, sticky="w", padx=6)
+        paned = tk.PanedWindow(self.root, orient="vertical", sashrelief="raised", sashwidth=6)
+        paned.pack(fill="both", expand=True, padx=8, pady=6)
 
-        tk.Label(frm_status, text="WebApp:").grid(row=0, column=2, sticky="w", padx=(20, 0))
-        tk.Label(frm_status, textvariable=self.var_webapp).grid(row=0, column=3, sticky="w", padx=6)
+        top = tk.Frame(paned)
+        paned.add(top, minsize=300)
+        bottom = tk.Frame(paned)
+        paned.add(bottom, minsize=100)
 
-        tk.Label(frm_status, text="Autonomous Life:").grid(row=1, column=0, sticky="w")
-        tk.Label(frm_status, textvariable=self.var_life).grid(row=1, column=1, sticky="w", padx=6)
+        tab_status, tab_commands, tab_recording, tab_safety = self._create_tabs(top, [
+            "1) Stato robot",
+            "2) Comandi",
+            "3) Registrazione segni",
+            "4) Sicurezza e motori",
+        ])
+        self._build_status_tab(tab_status)
+        self._build_commands_tab(tab_commands)
+        self._build_recording_tab(tab_recording)
+        self._build_safety_tab(tab_safety)
+        self._build_log(bottom)
 
-        tk.Label(frm_status, text="Last cmd:").grid(row=1, column=2, sticky="w", padx=(20, 0))
-        tk.Label(frm_status, textvariable=self.var_last).grid(row=1, column=3, sticky="w", padx=6)
+        # Divisore iniziale: circa 72% schede, 28% log (regolabile trascinando)
+        def place_sash():
+            try:
+                height = paned.winfo_height()
+                if height > 200:
+                    paned.sash_place(0, 0, int(height * 0.72))
+            except Exception:
+                pass
+        self.root.after(300, place_sash)
 
-        tk.Label(frm_status, text="Volume:").grid(row=2, column=0, sticky="w")
-        tk.Label(frm_status, textvariable=self.var_volume).grid(row=2, column=1, sticky="w", padx=6)
+    def _create_tabs(self, parent, titles):
+        """Crea le schede (ttk.Notebook, oppure pulsanti se ttk non e' disponibile)."""
+        frames = []
+        if ttk:
+            self.notebook = ttk.Notebook(parent)
+            self.notebook.pack(fill="both", expand=True)
+            for title in titles:
+                frame = tk.Frame(self.notebook)
+                self.notebook.add(frame, text="  %s  " % title)
+                frames.append(frame)
+            return frames
 
-        tk.Label(frm_status, text="Last error:").grid(row=3, column=0, sticky="w")
-        tk.Label(frm_status, textvariable=self.var_error, fg="red").grid(row=3, column=1, columnspan=3, sticky="w", padx=6)
+        self.notebook = None
+        bar = tk.Frame(parent)
+        bar.pack(fill="x")
+        container = tk.Frame(parent)
+        container.pack(fill="both", expand=True)
+        for title in titles:
+            frame = tk.Frame(container)
+            frame.place(relx=0, rely=0, relwidth=1, relheight=1)
+            frames.append(frame)
+            tk.Button(bar, text=title, command=frame.tkraise).pack(side="left", padx=2, pady=2)
+        frames[0].tkraise()
+        return frames
 
-        frm_main = tk.Frame(self.root)
-        frm_main.pack(fill="both", expand=True, padx=10, pady=5)
+    def _build_status_tab(self, tab):
+        value_font = ("TkDefaultFont", 11, "bold")
+        label_font = ("TkDefaultFont", 11)
 
-        frm_left = tk.Frame(frm_main)
-        frm_left.pack(side="left", fill="y", expand=False)
+        box_robot = tk.LabelFrame(tab, text="Robot", padx=10, pady=8)
+        box_robot.pack(fill="x", padx=10, pady=(10, 6))
 
-        frm_mid = tk.Frame(frm_main)
-        frm_mid.pack(side="left", fill="both", expand=True, padx=(10, 0))
+        tk.Label(box_robot, text="Connessione:", font=label_font).grid(row=0, column=0, sticky="w", pady=2)
+        self.lbl_connection = tk.Label(box_robot, textvariable=self.var_connection, font=value_font)
+        self.lbl_connection.grid(row=0, column=1, sticky="w", padx=12, pady=2)
+        row_conn = tk.Frame(box_robot)
+        row_conn.grid(row=0, column=2, sticky="w", padx=12)
+        tk.Button(row_conn, text="Riconnetti ora", command=self.on_reconnect).pack(side="left", padx=3)
+        self.btn_simulate_disconnect = tk.Button(row_conn, text="Simula disconnessione (demo)", command=self.on_simulate_disconnect)
+        self.btn_simulate_disconnect.pack(side="left", padx=3)
 
-        frm_right = tk.Frame(frm_main)
-        frm_right.pack(side="right", fill="both", expand=True, padx=(10, 0))
+        rows = [
+            ("Robot (IP:porta):", self.var_robot),
+            ("Modalita':", self.var_mode),
+            ("Autonomous Life:", self.var_life),
+            ("Volume:", self.var_volume),
+            ("Autonomia durante i gesti:", self.var_autonomy),
+        ]
+        for row, (label, var) in enumerate(rows, 1):
+            tk.Label(box_robot, text=label, font=label_font).grid(row=row, column=0, sticky="w", pady=2)
+            tk.Label(box_robot, textvariable=var, font=value_font).grid(row=row, column=1, sticky="w", padx=12, pady=2)
 
-        box_tts = tk.LabelFrame(frm_left, text="1) TTS")
-        box_tts.pack(fill="x", pady=6)
+        # Scelta del robot: demo/reale e indirizzo, senza modificare il file .env
+        self.var_target_mode = tk.StringVar(value="demo" if self.ctrl.fake_robot else "real")
+        self.var_target_ip = tk.StringVar(value=safe_unicode(self.ctrl.robot_ip))
+        self.var_target_port = tk.StringVar(value=safe_unicode(self.ctrl.robot_port))
+        box_target = tk.LabelFrame(tab, text="Scegli robot", padx=10, pady=8)
+        box_target.pack(fill="x", padx=10, pady=6)
+        tk.Radiobutton(box_target, text="Robot reale (Pepper)", variable=self.var_target_mode, value="real",
+                       font=label_font).grid(row=0, column=0, sticky="w", padx=(0, 16))
+        tk.Radiobutton(box_target, text="Demo (robot simulato)", variable=self.var_target_mode, value="demo",
+                       font=label_font).grid(row=0, column=1, columnspan=2, sticky="w")
+        tk.Label(box_target, text="Indirizzo IP:", font=label_font).grid(row=1, column=0, sticky="w", pady=(6, 2))
+        entry_ip = tk.Entry(box_target, textvariable=self.var_target_ip, width=20, font=label_font)
+        entry_ip.grid(row=1, column=1, sticky="w", pady=(6, 2))
+        entry_ip.bind("<Return>", lambda event: self.on_apply_target())
+        tk.Label(box_target, text="Porta:", font=label_font).grid(row=1, column=2, sticky="w", padx=(16, 4), pady=(6, 2))
+        tk.Entry(box_target, textvariable=self.var_target_port, width=7, font=label_font).grid(row=1, column=3, sticky="w", pady=(6, 2))
+        tk.Button(box_target, text="Applica e connetti", command=self.on_apply_target).grid(row=1, column=4, sticky="w", padx=(16, 0), pady=(6, 2))
+        tk.Label(box_target, text="Vale fino al riavvio del controller; i valori di partenza restano quelli del file .env.",
+                 fg="grey30").grid(row=2, column=0, columnspan=5, sticky="w", pady=(4, 0))
 
+        box_webapp = tk.LabelFrame(tab, text="WebApp e comandi", padx=10, pady=8)
+        box_webapp.pack(fill="x", padx=10, pady=6)
+        tk.Label(box_webapp, text="WebApp:", font=label_font).grid(row=0, column=0, sticky="w", pady=2)
+        tk.Label(box_webapp, textvariable=self.var_webapp, font=value_font).grid(row=0, column=1, sticky="w", padx=12, pady=2)
+        tk.Label(box_webapp, text="Ultimo comando:", font=label_font).grid(row=1, column=0, sticky="w", pady=2)
+        tk.Label(box_webapp, textvariable=self.var_last, font=value_font).grid(row=1, column=1, sticky="w", padx=12, pady=2)
+        tk.Label(box_webapp, text="Ultimo errore:", font=label_font).grid(row=2, column=0, sticky="nw", pady=2)
+        tk.Label(box_webapp, textvariable=self.var_error, font=label_font, fg="red",
+                 wraplength=900, justify="left").grid(row=2, column=1, sticky="w", padx=12, pady=2)
+
+        box_conf = tk.LabelFrame(tab, text="Configurazione", padx=10, pady=8)
+        box_conf.pack(fill="x", padx=10, pady=6)
+        info = [
+            ("URL WebApp:", safe_unicode(self.config["webapp"].get("base_url", ""))),
+            ("Cartella gesti:", safe_unicode(self.config["paths"].get("gesture_dir", ""))),
+        ]
+        for row, (label, value) in enumerate(info):
+            tk.Label(box_conf, text=label, font=label_font).grid(row=row, column=0, sticky="w", pady=2)
+            tk.Label(box_conf, text=value, font=label_font).grid(row=row, column=1, sticky="w", padx=12, pady=2)
+        tk.Label(box_conf, text="Gesti caricati:", font=label_font).grid(row=len(info), column=0, sticky="w", pady=2)
+        tk.Label(box_conf, textvariable=self.var_gesture_count, font=label_font).grid(row=len(info), column=1, sticky="w", padx=12, pady=2)
+
+    def _build_safety_tab(self, tab):
+        """Temperatura dei motori, ostacoli vicini alle braccia e protezioni di ALMotion."""
+        value_font = ("TkDefaultFont", 11, "bold")
+        label_font = ("TkDefaultFont", 11)
+        left = tk.Frame(tab)
+        left.pack(side="left", fill="both", expand=True)
+        right = tk.Frame(tab)
+        right.pack(side="left", fill="both", expand=True)
+        tab = left
+
+        # Temperatura dei motori: valori letti in background dal controller (ALMemory)
+        box_temp = tk.LabelFrame(tab, text="Temperatura motori (C)", padx=10, pady=8)
+        box_temp.pack(fill="x", padx=10, pady=6)
+        self.temp_labels = {}
+        rows = [("Spalla pitch", "ShoulderPitch"), ("Spalla roll", "ShoulderRoll"), ("Gomito yaw", "ElbowYaw"),
+                ("Gomito roll", "ElbowRoll"), ("Polso yaw", "WristYaw"), ("Mano", "Hand")]
+        tk.Label(box_temp, text="SX", font=value_font).grid(row=0, column=1, padx=12)
+        tk.Label(box_temp, text="DX", font=value_font).grid(row=0, column=2, padx=12)
+        for r, (label, suffix) in enumerate(rows, 1):
+            tk.Label(box_temp, text=label, font=label_font).grid(row=r, column=0, sticky="w")
+            for c, side in enumerate(("L", "R"), 1):
+                var = tk.StringVar(value="-")
+                lbl = tk.Label(box_temp, textvariable=var, font=label_font, width=6)
+                lbl.grid(row=r, column=c)
+                self.temp_labels[side + suffix] = (var, lbl)
+        tk.Label(box_temp, text="Testa (yaw / pitch)", font=label_font).grid(row=len(rows) + 1, column=0, sticky="w")
+        for c, joint in enumerate(("HeadYaw", "HeadPitch"), 1):
+            var = tk.StringVar(value="-")
+            lbl = tk.Label(box_temp, textvariable=var, font=label_font, width=6)
+            lbl.grid(row=len(rows) + 1, column=c)
+            self.temp_labels[joint] = (var, lbl)
+        tk.Label(box_temp, text="Verde = normale, arancione = calda, rosso = molto calda (NAOqi riduce la forza: "
+                                "fai Rest e una pausa). Aggiornata ogni ~3 s.",
+                 fg="grey30", wraplength=600, justify="left").grid(row=0, column=3, rowspan=4, sticky="nw", padx=(30, 0))
+
+        # Ostacoli vicini alle braccia (protezione anti-collisione esterna)
+        box_obst = tk.LabelFrame(right, text="Ostacoli vicini alle braccia", padx=10, pady=8)
+        box_obst.pack(fill="x", padx=10, pady=(10, 6))
+        self.obstacle_vars = {}
+        for r, (chain, label) in enumerate((("LArm", "Braccio SX"), ("RArm", "Braccio DX"))):
+            tk.Label(box_obst, text=label, font=label_font).grid(row=r, column=0, sticky="w", pady=2)
+            var_dist = tk.StringVar(value="-")
+            lbl_dist = tk.Label(box_obst, textvariable=var_dist, font=value_font, width=30, anchor="w")
+            lbl_dist.grid(row=r, column=1, sticky="w", padx=10)
+            var_clip = tk.StringVar(value="")
+            lbl_clip = tk.Label(box_obst, textvariable=var_clip, font=label_font, width=34, anchor="w")
+            lbl_clip.grid(row=r, column=2, sticky="w")
+            self.obstacle_vars[chain] = (var_dist, lbl_dist, var_clip, lbl_clip)
+        row_obst = tk.Frame(box_obst)
+        row_obst.grid(row=2, column=0, columnspan=3, sticky="w", pady=(6, 0))
+        tk.Button(row_obst, text="Azzera conteggi", command=self.on_reset_safety_counts).pack(side="left", padx=(0, 6))
+        self.btn_demo_obstacle = tk.Button(row_obst, text="Simula ostacolo a destra (demo)", command=self.on_toggle_demo_obstacle)
+        self.btn_demo_obstacle.pack(side="left")
+        tk.Label(box_obst, text="Distanza tra l'ostacolo piu' vicino e la mano. Se il braccio viene rallentato "
+                                "(rosso), allontana il robot dall'ostacolo o spostati tu: la protezione frena le braccia "
+                                "anche nelle zone che i sensori non vedono.",
+                 fg="grey30", wraplength=620, justify="left").grid(row=3, column=0, columnspan=3, sticky="w", pady=(6, 0))
+
+        # Protezioni di ALMotion
+        box_prot = tk.LabelFrame(right, text="Protezioni del robot", padx=10, pady=8)
+        box_prot.pack(fill="x", padx=10, pady=6)
+        self.protection_vars = {}
+        from peppersign.controller import PROTECTIONS
+        for r, (key, label, _kind, _name, editable) in enumerate(PROTECTIONS):
+            tk.Label(box_prot, text=label, font=label_font).grid(row=r, column=0, sticky="w", pady=2)
+            var = tk.StringVar(value="-")
+            lbl = tk.Label(box_prot, textvariable=var, font=value_font, width=12)
+            lbl.grid(row=r, column=1, padx=10)
+            if editable:
+                tk.Button(box_prot, text="Disattiva", width=9,
+                          command=lambda k=key: self.on_set_protection(k, False)).grid(row=r, column=2, padx=2)
+                tk.Button(box_prot, text="Attiva", width=9,
+                          command=lambda k=key: self.on_set_protection(k, True)).grid(row=r, column=3, padx=2)
+            else:
+                tk.Label(box_prot, text="(solo lettura: protegge i motori)", fg="grey30").grid(row=r, column=2, columnspan=2, sticky="w")
+            self.protection_vars[key] = (var, lbl)
+        row_prot = tk.Frame(box_prot)
+        row_prot.grid(row=len(PROTECTIONS), column=0, columnspan=4, sticky="w", pady=(8, 0))
+        tk.Button(row_prot, text="Ripristina tutte", command=self.on_restore_protections).pack(side="left", padx=(0, 6))
+        tk.Button(row_prot, text="Aggiorna stato", command=self.on_refresh_protections).pack(side="left")
+        tk.Label(box_prot, text="Le protezioni disattivate da qui vengono riattivate alla chiusura del pannello. "
+                                "Disattiva l'anti-collisione esterna solo se nessuno e' a portata delle braccia; "
+                                "senza anti-collisione con il corpo le braccia possono urtare tablet e testa.",
+                 fg="dark red", wraplength=620, justify="left").grid(row=len(PROTECTIONS) + 1, column=0, columnspan=4, sticky="w", pady=(6, 0))
+
+    def _build_commands_tab(self, tab):
+        grid = tk.Frame(tab)
+        grid.pack(fill="both", expand=True, padx=10, pady=10)
+
+        box_tts = tk.LabelFrame(grid, text="Voce (TTS)")
+        box_tts.grid(row=0, column=0, sticky="nwe", padx=(0, 10), pady=6)
         tk.Entry(box_tts, textvariable=self.var_say_text, width=30).pack(side="left", padx=8, pady=8)
         tk.Button(box_tts, text="Dì", width=6, command=self.on_say).pack(side="left", padx=6)
         tk.Button(box_tts, text="Dì animato", width=10, command=self.on_say_animated).pack(side="left", padx=6)
 
-        box_util = tk.LabelFrame(frm_left, text="2) Utility")
-        box_util.pack(fill="x", pady=6)
-
+        box_util = tk.LabelFrame(grid, text="Robot")
+        box_util.grid(row=1, column=0, sticky="nwe", padx=(0, 10), pady=6)
         tk.Button(box_util, text="WakeUp", width=10, command=self.on_wakeup).pack(side="left", padx=8, pady=8)
         tk.Button(box_util, text="Rest", width=10, command=self.on_rest).pack(side="left", padx=6, pady=8)
         tk.Button(box_util, text="Life ON", width=10, command=self.on_life_on).pack(side="left", padx=6, pady=8)
         tk.Button(box_util, text="Life OFF", width=10, command=self.on_life_off).pack(side="left", padx=6, pady=8)
 
-        box_volume = tk.LabelFrame(frm_left, text="3) Volume")
-        box_volume.pack(fill="x", pady=6)
-
+        box_volume = tk.LabelFrame(grid, text="Volume")
+        box_volume.grid(row=0, column=1, sticky="nwe", pady=6)
         tk.Label(box_volume, text="Uscita:").pack(side="left", padx=(8, 4), pady=8)
         tk.Label(box_volume, textvariable=self.var_volume, width=6).pack(side="left", padx=(0, 8), pady=8)
         tk.Button(box_volume, text="Vol -", width=8, command=self.on_volume_down).pack(side="left", padx=6, pady=8)
         tk.Button(box_volume, text="Vol +", width=8, command=self.on_volume_up).pack(side="left", padx=6, pady=8)
 
-        box_map = tk.LabelFrame(frm_left, text="4) PLAY_GESTURE")
-        box_map.pack(fill="x", pady=6)
-
+        box_map = tk.LabelFrame(grid, text="Esegui gesto (PLAY_GESTURE)")
+        box_map.grid(row=1, column=1, sticky="nwe", pady=6)
         keys = self.gesture_store.keys() or [""]
         if ttk:
             self.combo_gesture = ttk.Combobox(box_map, textvariable=self.var_gesture, values=keys, width=30, state="readonly")
@@ -206,26 +387,27 @@ class PepperGUI(object):
             opt = tk.OptionMenu(box_map, self.var_gesture, *keys)
             opt.config(width=26)
             opt.pack(side="left", padx=8, pady=8)
-
         tk.Button(box_map, text="Avvia", width=8, command=self.on_gesture).pack(side="left", padx=6)
         tk.Button(box_map, text="Ricarica", width=8, command=self.on_reload_gestures).pack(side="left", padx=6)
 
-        box_cap = tk.LabelFrame(frm_mid, text="5) Cattura keyframe dal robot (Dump Pose)")
-        box_cap.pack(fill="both", expand=True)
+        # Spazio riservato ai controlli futuri (es. STOP di emergenza, testa, tablet)
+        self.frm_commands_extra = tk.Frame(grid)
+        self.frm_commands_extra.grid(row=2, column=0, columnspan=2, sticky="nwe", pady=6)
+
+    def _build_recording_tab(self, tab):
+        box_cap = tk.Frame(tab)
+        box_cap.pack(fill="both", expand=True, padx=6, pady=6)
 
         row1 = tk.Frame(box_cap)
         row1.pack(fill="x", padx=8, pady=(8, 4))
-
         tk.Label(row1, text="Nome gesto:").pack(side="left")
         tk.Entry(row1, textvariable=self.var_capture_name, width=28).pack(side="left", padx=6)
-
         tk.Label(row1, text="dt frame (s):").pack(side="left", padx=(10, 0))
         tk.Entry(row1, textvariable=self.var_frame_dt, width=6).pack(side="left", padx=6)
         tk.Button(row1, text="Applica dt a tutti", command=self.on_apply_dt_all).pack(side="left", padx=6)
 
         row2 = tk.Frame(box_cap)
         row2.pack(fill="x", padx=8, pady=(0, 6))
-
         tk.Button(row2, text="Prepara reg.", width=12, command=self.on_prepare_recording).pack(side="left", padx=3)
         tk.Button(row2, text="Free Arms", width=10, command=self.on_free_arms).pack(side="left", padx=3)
         tk.Button(row2, text="Hold Arms", width=10, command=self.on_hold_arms).pack(side="left", padx=3)
@@ -245,7 +427,6 @@ class PepperGUI(object):
 
         row2b = tk.Frame(box_cap)
         row2b.pack(fill="x", padx=8, pady=(0, 6))
-
         tk.Label(row2b, text="Mani:").pack(side="left", padx=(0, 8))
         tk.Button(row2b, text="Apri SX", width=10, command=self.on_open_left_hand).pack(side="left", padx=3)
         tk.Button(row2b, text="Chiudi SX", width=10, command=self.on_close_left_hand).pack(side="left", padx=3)
@@ -254,34 +435,66 @@ class PepperGUI(object):
         tk.Button(row2b, text="Apri entrambe", width=12, command=self.on_open_both_hands).pack(side="left", padx=(12, 3))
         tk.Button(row2b, text="Chiudi entrambe", width=13, command=self.on_close_both_hands).pack(side="left", padx=3)
 
+        # Riprendere la registrazione da un frame: il robot va nella posa del frame
+        # selezionato e le braccia diventano "morbide" (si muovono a mano ma non cadono)
+        self.var_soft_after = tk.IntVar(value=1)
+        self.var_soft_group = tk.StringVar(value="both")
+        self.var_soft_stiffness = tk.StringVar(value="0.40")
+        self.var_soft_state = tk.StringVar(value="Morbido: OFF")
+        row2d = tk.Frame(box_cap)
+        row2d.pack(fill="x", padx=8, pady=(0, 6))
+        tk.Button(row2d, text="Vai al frame selezionato", width=20, command=self.on_go_to_frame).pack(side="left", padx=(0, 4))
+        tk.Checkbutton(row2d, text="poi braccia morbide", variable=self.var_soft_after).pack(side="left", padx=(0, 12))
+        tk.Label(row2d, text="Braccia morbide:").pack(side="left")
+        for label, value in (("entrambe", "both"), ("SX", "left"), ("DX", "right")):
+            tk.Radiobutton(row2d, text=label, variable=self.var_soft_group, value=value).pack(side="left")
+        tk.Label(row2d, text="stiffness").pack(side="left", padx=(8, 2))
+        tk.Spinbox(row2d, from_=0.10, to=0.80, increment=0.05, width=5, format="%.2f",
+                   textvariable=self.var_soft_stiffness).pack(side="left")
+        tk.Button(row2d, text="Morbido ON", width=11, command=self.on_soft_on).pack(side="left", padx=(8, 3))
+        tk.Button(row2d, text="Morbido OFF", width=11, command=self.on_soft_off).pack(side="left", padx=3)
+        tk.Label(row2d, textvariable=self.var_soft_state, fg="dark green").pack(side="left", padx=8)
+
         row3 = tk.Frame(box_cap)
         row3.pack(fill="both", expand=True, padx=8, pady=(0, 8))
 
         left_list = tk.Frame(row3)
         left_list.pack(side="left", fill="both", expand=True)
-
         tk.Label(left_list, text="Frames catturati (ordine):").pack(anchor="w")
-        self.list_frames = tk.Listbox(left_list, height=14)
-        self.list_frames.pack(fill="both", expand=True)
+        list_scroll = tk.Scrollbar(left_list, orient="vertical")
+        self.list_frames = tk.Listbox(left_list, height=10, yscrollcommand=list_scroll.set, exportselection=False)
+        list_scroll.config(command=self.list_frames.yview)
+        list_scroll.pack(side="right", fill="y")
+        self.list_frames.pack(side="left", fill="both", expand=True)
         self.list_frames.bind("<<ListboxSelect>>", self.on_frame_select)
 
-        right_btn = tk.Frame(row3)
-        right_btn.pack(side="left", fill="y", padx=(10, 0))
+        # Colonna A: gestione frame e file
+        col_a = tk.Frame(row3)
+        col_a.pack(side="left", fill="y", padx=(10, 0))
 
-        tk.Button(right_btn, text="Rimuovi selezionato", width=18, command=self.on_remove_frame).pack(pady=3)
-        tk.Button(right_btn, text="Copia frame", width=18, command=self.on_copy_selected_frame).pack(pady=3)
-        tk.Button(right_btn, text="Clear", width=18, command=self.on_clear_frames).pack(pady=3)
+        box_frames = tk.LabelFrame(col_a, text="Frame")
+        box_frames.pack(fill="x", pady=(0, 3))
+        row_move = tk.Frame(box_frames)
+        row_move.pack(padx=4, pady=(4, 2))
+        tk.Button(row_move, text="Sposta su", width=8, command=self.on_move_frame_up).pack(side="left", padx=(0, 2))
+        tk.Button(row_move, text="Sposta giu", width=8, command=self.on_move_frame_down).pack(side="left", padx=(2, 0))
+        tk.Button(box_frames, text="Rimuovi selezionato", width=18, command=self.on_remove_frame).pack(padx=4, pady=2)
+        tk.Button(box_frames, text="Copia frame", width=18, command=self.on_copy_selected_frame).pack(padx=4, pady=2)
+        tk.Button(box_frames, text="Clear", width=18, command=self.on_clear_frames).pack(padx=4, pady=(2, 4))
 
-        # Pulsanti principali tenuti in alto per evitare che finiscano fuori dalla finestra.
-        box_file = tk.LabelFrame(right_btn, text="File / test gesture")
-        box_file.pack(fill="x", pady=(8, 3))
+        box_file = tk.LabelFrame(col_a, text="File / test gesture")
+        box_file.pack(fill="x", pady=(6, 3))
         tk.Button(box_file, text="Test gesture", width=18, command=self.on_test_frames).pack(padx=4, pady=(4, 2))
         tk.Button(box_file, text="Salva sequenza JSON", width=18, command=self.on_save_sequence).pack(padx=4, pady=2)
         tk.Button(box_file, text="Carica sequenza JSON", width=18, command=self.on_load_sequence).pack(padx=4, pady=2)
         tk.Button(box_file, text="Esporta gesture pronta", width=18, command=self.on_export_ready_gesture).pack(padx=4, pady=(2, 4))
 
-        box_edit = tk.LabelFrame(right_btn, text="Tuning frame")
-        box_edit.pack(fill="x", pady=(10, 3))
+        # Colonna B: modifica dei frame
+        col_b = tk.Frame(row3)
+        col_b.pack(side="left", fill="y", padx=(10, 0))
+
+        box_edit = tk.LabelFrame(col_b, text="Tuning frame")
+        box_edit.pack(fill="x", pady=(0, 3))
 
         tk.Label(box_edit, text="dt selez.:").grid(row=0, column=0, sticky="w", padx=4, pady=2)
         tk.Entry(box_edit, textvariable=self.var_edit_dt, width=7).grid(row=0, column=1, sticky="w", padx=4, pady=2)
@@ -312,12 +525,16 @@ class PepperGUI(object):
 
         tk.Button(box_edit, text="Valida frame", width=18, command=self.on_validate_selected_frame).grid(row=5, column=0, columnspan=3, sticky="w", padx=4, pady=(4, 4))
 
-        box_mirror = tk.LabelFrame(right_btn, text="Specchia frame")
-        box_mirror.pack(fill="x", pady=(6, 3))
+        # Colonna C: specchio e frame composito
+        col_c = tk.Frame(row3)
+        col_c.pack(side="left", fill="y", padx=(10, 0))
+
+        box_mirror = tk.LabelFrame(col_c, text="Specchia frame")
+        box_mirror.pack(fill="x", pady=(0, 3))
         tk.Button(box_mirror, text="SX -> DX", width=8, command=self.on_mirror_left_to_right).pack(side="left", padx=4, pady=4)
         tk.Button(box_mirror, text="DX -> SX", width=8, command=self.on_mirror_right_to_left).pack(side="left", padx=4, pady=4)
 
-        box_composite = tk.LabelFrame(right_btn, text="Frame composito")
+        box_composite = tk.LabelFrame(col_c, text="Frame composito")
         box_composite.pack(fill="x", pady=(6, 3))
         tk.Button(box_composite, text="Nuovo comp.", width=18, command=self.on_new_composite_frame).pack(padx=4, pady=(4, 2))
         row_comp_1 = tk.Frame(box_composite)
@@ -328,9 +545,33 @@ class PepperGUI(object):
         row_comp_2.pack(fill="x", padx=4, pady=(2, 4))
         tk.Button(row_comp_2, text="Agg. Testa", width=18, command=self.on_update_head_in_selected_frame).pack(side="left")
 
-        tk.Label(frm_right, text="Log:").pack(anchor="w")
-        self.txt_log = tk.Text(frm_right, height=28, wrap="word")
-        self.txt_log.pack(fill="both", expand=True)
+        box_coord = tk.LabelFrame(col_c, text="Frame da coordinate (beta)")
+        box_coord.pack(fill="x", pady=(6, 3))
+        tk.Button(box_coord, text="Apri...", width=18, command=self.on_open_pose_dialog).pack(padx=4, pady=4)
+
+    def _build_log(self, parent):
+        # Barra di stato sempre visibile (sopra il log, in tutte le schede)
+        bar = tk.Frame(parent)
+        bar.pack(fill="x", pady=(2, 2))
+        tk.Label(bar, text="Robot:").pack(side="left")
+        self.lbl_connection_bar = tk.Label(bar, textvariable=self.var_connection, font=("TkDefaultFont", 10, "bold"))
+        self.lbl_connection_bar.pack(side="left", padx=(4, 20))
+        tk.Label(bar, text="WebApp:").pack(side="left")
+        tk.Label(bar, textvariable=self.var_webapp, font=("TkDefaultFont", 10, "bold")).pack(side="left", padx=(4, 20))
+        tk.Label(bar, text="Motori:").pack(side="left")
+        self.var_temp_bar = tk.StringVar(value="-")
+        self.lbl_temp_bar = tk.Label(bar, textvariable=self.var_temp_bar, font=("TkDefaultFont", 10, "bold"))
+        self.lbl_temp_bar.pack(side="left", padx=(4, 20))
+        tk.Label(bar, text="Ostacoli:").pack(side="left")
+        self.var_obst_bar = tk.StringVar(value="-")
+        self.lbl_obst_bar = tk.Label(bar, textvariable=self.var_obst_bar, font=("TkDefaultFont", 10, "bold"))
+        self.lbl_obst_bar.pack(side="left", padx=(4, 20))
+        tk.Label(bar, text="Log:").pack(side="left", padx=(20, 0))
+        log_scroll = tk.Scrollbar(parent, orient="vertical")
+        self.txt_log = tk.Text(parent, height=10, wrap="word", yscrollcommand=log_scroll.set)
+        log_scroll.config(command=self.txt_log.yview)
+        log_scroll.pack(side="right", fill="y")
+        self.txt_log.pack(side="left", fill="both", expand=True)
         self.txt_log.insert("end", "Pannello avviato.\n")
         self.txt_log.config(state="disabled")
 
@@ -901,6 +1142,198 @@ class PepperGUI(object):
             self.enqueue_log("[UI] aggiorno lista frame")
         self._run_async(run)
 
+    # ------------------------------------------------------------------
+    # Riprendere da un frame, braccia morbide, ordine dei frame
+    # ------------------------------------------------------------------
+
+    def _soft_stiffness_value(self):
+        try:
+            value = float(self.var_soft_stiffness.get())
+        except Exception:
+            self.enqueue_log("[MORBIDO] Stiffness non valida, uso 0.40")
+            value = 0.40
+        value = max(0.10, min(value, 0.80))
+        self.var_soft_stiffness.set("%.2f" % value)
+        return value
+
+    TEMP_COLORS = ("dark green", "dark orange", "red")
+
+    def _update_safety(self):
+        """Aggiorna ostacoli e protezioni dai valori in cache (nessuna chiamata al robot)."""
+        now = time.time()
+        obstacles = getattr(self.ctrl, "cached_obstacles", {}) or {}
+        events = getattr(self.ctrl, "safety_events", {}) or {}
+        worst = None
+        for chain, (var_dist, lbl_dist, var_clip, lbl_clip) in getattr(self, "obstacle_vars", {}).items():
+            obstacle = obstacles.get(chain)
+            if obstacle is None:
+                var_dist.set("non disponibile")
+                lbl_dist.config(fg="grey40")
+            elif obstacle.get("distance") is None:
+                var_dist.set("nessun ostacolo vicino")
+                lbl_dist.config(fg="dark green")
+            else:
+                distance = obstacle["distance"]
+                var_dist.set("%.0f cm %s" % (100 * distance, obstacle.get("side", "")))
+                lbl_dist.config(fg="red" if distance < 0.3 else ("dark orange" if distance < 0.6 else "dark green"))
+                if worst is None or distance < worst[1]:
+                    worst = (chain, distance)
+            event = events.get(chain) or {}
+            count, last = event.get("count", 0), event.get("last", 0.0)
+            if count:
+                ago = now - last
+                var_clip.set("rallentato %d %s (ultima %s)" % (count, "volta" if count == 1 else "volte",
+                                                              "ora" if ago < 2 else "%.0f s fa" % ago))
+                lbl_clip.config(fg="red" if ago < 5 else "grey30")
+            else:
+                var_clip.set("mai rallentato")
+                lbl_clip.config(fg="grey30")
+        recent = [c for c, e in events.items() if e.get("count") and now - e.get("last", 0) < 5]
+        if recent:
+            self.var_obst_bar.set("RALLENTATO %s" % "/".join("SX" if c == "LArm" else "DX" for c in sorted(recent)))
+            self.lbl_obst_bar.config(fg="red")
+        elif worst is not None:
+            self.var_obst_bar.set("%s %.0f cm" % ("SX" if worst[0] == "LArm" else "DX", 100 * worst[1]))
+            self.lbl_obst_bar.config(fg="red" if worst[1] < 0.3 else ("dark orange" if worst[1] < 0.6 else "dark green"))
+        else:
+            self.var_obst_bar.set("nessuno" if obstacles else "n.d.")
+            self.lbl_obst_bar.config(fg="dark green" if obstacles else "grey40")
+        protections = getattr(self.ctrl, "cached_protections", {}) or {}
+        for key, (var, lbl) in getattr(self, "protection_vars", {}).items():
+            value = protections.get(key)
+            if value is None:
+                var.set("n.d." if not protections else "non disponibile")
+                lbl.config(fg="grey40")
+            else:
+                var.set("ATTIVA" if value else "DISATTIVATA")
+                lbl.config(fg="dark green" if value else "red")
+        btn = getattr(self, "btn_demo_obstacle", None)
+        if btn is not None:
+            btn.config(state="normal" if self.ctrl.fake_robot else "disabled")
+
+    def on_set_protection(self, key, enabled):
+        if not enabled and tkMessageBox is not None:
+            try:
+                if not tkMessageBox.askyesno("Disattivare la protezione?",
+                                             "La protezione verra' disattivata finche' non la riattivi o chiudi il pannello.\n"
+                                             "Assicurati che nessuno sia a portata delle braccia del robot.\n\nProcedere?"):
+                    return
+            except Exception:
+                pass
+
+        def run():
+            ok, message = self.ctrl.set_protection(key, enabled)
+            self.enqueue_log("[SICUREZZA] %s" % safe_unicode(message))
+        self._run_async(run)
+
+    def on_restore_protections(self):
+        def run():
+            ok, message = self.ctrl.restore_protections()
+            self.enqueue_log("[SICUREZZA] %s" % safe_unicode(message))
+        self._run_async(run)
+
+    def on_refresh_protections(self):
+        def run():
+            self.ctrl.refresh_protections()
+            self.ctrl.refresh_obstacles()
+            self.enqueue_log("[SICUREZZA] Stato delle protezioni aggiornato")
+        self._run_async(run)
+
+    def on_reset_safety_counts(self):
+        self.ctrl.reset_safety_counts()
+        self.enqueue_log("[SICUREZZA] Conteggi dei rallentamenti azzerati")
+
+    def on_toggle_demo_obstacle(self):
+        self._demo_obstacle = not getattr(self, "_demo_obstacle", False)
+        ok, message = self.ctrl.simulate_obstacle([0.25, -0.35, 0.0] if self._demo_obstacle else None)
+        self.enqueue_log("[DEMO] %s" % safe_unicode(message))
+        if not ok:
+            self._demo_obstacle = False
+
+    def _update_temperatures(self):
+        """Aggiorna l'indicatore delle temperature dai valori in cache (nessuna chiamata al robot)."""
+        temps = getattr(self.ctrl, "cached_temperatures", {}) or {}
+        hottest = None
+        for joint, (var, lbl) in getattr(self, "temp_labels", {}).items():
+            value = temps.get(joint)
+            if not value:
+                var.set("-")
+                lbl.config(fg="grey40")
+                continue
+            temperature, status = value
+            level = self.ctrl.temperature_level(temperature, status)
+            var.set("%.0f" % temperature)
+            lbl.config(fg=self.TEMP_COLORS[level])
+            if hottest is None or temperature > hottest[1]:
+                hottest = (joint, temperature, level)
+        if hottest is None:
+            self.var_temp_bar.set("n.d.")
+            self.lbl_temp_bar.config(fg="grey40")
+        else:
+            self.var_temp_bar.set("max %.0f C (%s)" % (hottest[1], hottest[0]))
+            self.lbl_temp_bar.config(fg=self.TEMP_COLORS[hottest[2]])
+
+    def on_go_to_frame(self):
+        index = self._get_selected_frame_index()
+        if index is None:
+            self.enqueue_log("[POSA] Seleziona prima un frame nella lista.")
+            return
+        joints = list(self.capture_joints)
+        angles = list(self.frames[index].get("angles", []))
+        if len(angles) != len(joints):
+            self.enqueue_log("[POSA] Il frame %d ha %d angoli, attesi %d: non posso usarlo." % (index + 1, len(angles), len(joints)))
+            return
+        soft_after = bool(self.var_soft_after.get())
+        group = self.var_soft_group.get()
+        stiffness = self._soft_stiffness_value()
+
+        def run():
+            ok, message = self.ctrl.go_to_pose(joints, angles)
+            self.enqueue_log("[POSA] Frame %d -> %s" % (index + 1, safe_unicode(message)))
+            if ok and soft_after:
+                ok_soft, message_soft = self.ctrl.start_soft_hold(group, stiffness)
+                self.enqueue_log("[MORBIDO] %s" % safe_unicode(message_soft))
+        self.enqueue_log("[POSA] Movimento verso il frame %d..." % (index + 1))
+        self._run_async(run)
+
+    def on_soft_on(self):
+        group = self.var_soft_group.get()
+        stiffness = self._soft_stiffness_value()
+
+        def run():
+            ok, message = self.ctrl.start_soft_hold(group, stiffness)
+            self.enqueue_log("[MORBIDO] %s" % safe_unicode(message))
+        self._run_async(run)
+
+    def on_soft_off(self):
+        def run():
+            ok, message = self.ctrl.stop_soft_hold(1.0)
+            self.enqueue_log("[MORBIDO] %s" % safe_unicode(message))
+        self._run_async(run)
+
+    def _move_selected_frame(self, delta):
+        index = self._get_selected_frame_index()
+        if index is None:
+            self.enqueue_log("[FRAME] Seleziona prima un frame da spostare.")
+            return
+        new_index = index + delta
+        if new_index < 0 or new_index >= len(self.frames):
+            return
+        self.frames[index], self.frames[new_index] = self.frames[new_index], self.frames[index]
+        self._refresh_frames_listbox()
+        self._select_frame_index(new_index)
+        try:
+            self._load_selected_frame_to_editor()
+        except Exception:
+            pass
+        self.enqueue_log("[FRAME] Frame %d spostato in posizione %d" % (index + 1, new_index + 1))
+
+    def on_move_frame_up(self):
+        self._move_selected_frame(-1)
+
+    def on_move_frame_down(self):
+        self._move_selected_frame(1)
+
     def on_remove_frame(self):
         try:
             selected = self.list_frames.curselection()
@@ -1086,15 +1519,40 @@ class PepperGUI(object):
 
         try:
             self.var_robot.set("%s:%d" % (self.ctrl.robot_ip, self.ctrl.robot_port))
+            self.var_mode.set("DEMO - robot simulato" if self.ctrl.fake_robot else "Robot reale")
+            self._update_title()
+            btn = getattr(self, "btn_simulate_disconnect", None)
+            if btn is not None:
+                btn.config(state="normal" if self.ctrl.fake_robot else "disabled")
+            self.var_gesture_count.set(str(len(self.gesture_store.keys())))
+            self.var_autonomy.set(safe_unicode(self.config.get("robot_defaults", {}).get("gesture_autonomy", "pause")))
             self.var_webapp.set("OK" if self.ctrl.connected_to_webapp else "OFF")
-            self.var_life.set(self.ctrl.get_autonomous_life_state())
+            # Solo valori in cache (aggiornati da controller.monitor_loop):
+            # nessuna chiamata al robot dal thread grafico.
+            self.var_life.set(self.ctrl.cached_life_state)
             self.var_error.set(self.ctrl.last_error)
+            volume = self.ctrl.cached_volume
+            self.var_volume.set("%d%%" % int(volume) if volume is not None else "N/A")
 
-            ok, volume_or_msg = self.ctrl.get_volume()
-            if ok:
-                self.var_volume.set("%d%%" % int(volume_or_msg))
+            state = self.ctrl.connection_state
+            self.var_connection.set(state)
+            self._update_temperatures()
+            self._update_safety()
+            soft = self.ctrl.soft_hold_state()
+            if soft:
+                names = {"both": "entrambe", "left": "SX", "right": "DX"}
+                self.var_soft_state.set("Morbido: ON (%s, %.2f)" % (names.get(soft[0], soft[0]), soft[1]))
             else:
-                self.var_volume.set("N/A")
+                self.var_soft_state.set("Morbido: OFF")
+            if self.ctrl.robot_connected:
+                color = "dark green"
+            elif state.startswith("CONNESSIONE"):
+                color = "dark orange"
+            else:
+                color = "red"
+            for label in (getattr(self, "lbl_connection", None), getattr(self, "lbl_connection_bar", None)):
+                if label is not None:
+                    label.config(fg=color)
 
             last_cmd = self.ctrl.last_cmd
             if last_cmd and isinstance(last_cmd, dict):
@@ -1106,10 +1564,65 @@ class PepperGUI(object):
 
         self.root.after(500, self._tick)
 
+    def on_open_pose_dialog(self):
+        """Finestra per creare un frame da punto del corpo + orientamento della mano (servizio Process)."""
+        dialog = getattr(self, "_pose_dialog", None)
+        if dialog is not None:
+            try:
+                dialog.win.lift()
+                return
+            except Exception:
+                self._pose_dialog = None
+        try:
+            from peppersign.pose_dialog import PoseFromCoordinatesDialog
+            self._pose_dialog = PoseFromCoordinatesDialog(self)
+        except Exception as exc:
+            self.enqueue_log("[COORD] Impossibile aprire la finestra: %s" % str(exc))
+
+    def on_reconnect(self):
+        self.enqueue_log("[ROBOT] Riconnessione in corso...")
+        self.ctrl.request_reconnect()
+
+    def on_apply_target(self):
+        fake = self.var_target_mode.get() == "demo"
+        ip = self.var_target_ip.get()
+        port = self.var_target_port.get()
+
+        def run():
+            ok, message = self.ctrl.configure_target(fake, ip, port)
+            self.enqueue_log("[ROBOT] %s" % safe_unicode(message))
+            if not ok:
+                self.ctrl.set_error(message)
+        self._run_async(run)
+
+    def _update_title(self):
+        suffix = "  [DEMO - robot simulato]"
+        base = getattr(self, "_base_title", None)
+        if base is None:
+            base = safe_unicode(self.config.get("ui", {}).get("window_title", "PepperSign")).replace(suffix, "")
+            self._base_title = base
+            self._shown_title = None
+        title = base + (suffix if self.ctrl.fake_robot else "")
+        if title != self._shown_title:
+            self._shown_title = title
+            try:
+                self.root.title(title)
+            except Exception:
+                pass
+
+    def on_simulate_disconnect(self):
+        ok, message = self.ctrl.simulate_disconnect(15)
+        self.enqueue_log("[DEMO] %s" % safe_unicode(message))
+
     def on_close(self):
         self.enqueue_log("[EXIT] Chiusura richiesta...")
+        try:
+            if self.ctrl.robot_connected:
+                self.ctrl.restore_protections()     # riattiva le protezioni disattivate dal pannello
+        except Exception:
+            pass
         self.ctrl.running = False
-        if self.config["ui"].get("rest_on_close", True):
+        if self.config["ui"].get("rest_on_close", True) and self.ctrl.robot_connected:
             try:
                 self.ctrl.rest()
             except Exception:

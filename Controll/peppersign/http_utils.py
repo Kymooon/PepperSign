@@ -58,3 +58,26 @@ def webapp_upload_audio(upload_url, session_id, wav_bytes, timeout=60):
 
     response = urllib2.urlopen(request, timeout=timeout)
     return response.getcode(), response.read()
+
+
+def http_post_json(url, payload, timeout=10):
+    """POST di un oggetto JSON; ritorna la risposta JSON (anche per errori HTTP 4xx/5xx con corpo JSON)."""
+    body = json.dumps(payload)
+    if not PY2 and isinstance(body, str):
+        body = body.encode("utf-8")
+    request = urllib2.Request(url, data=body)
+    request.add_header("Content-Type", "application/json")
+    try:
+        response = urllib2.urlopen(request, timeout=timeout)
+        data = response.read()
+    except Exception as exc:
+        # HTTPError ha un corpo: se e' JSON (es. {"ok": false, "error": ...}) lo restituisco
+        reader = getattr(exc, "read", None)
+        if reader is None:
+            raise
+        data = reader()
+        try:
+            return json.loads(data)
+        except Exception:
+            raise exc
+    return json.loads(data)
