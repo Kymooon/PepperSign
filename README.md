@@ -1,8 +1,13 @@
 # PepperSign
 
-Sistema per l'insegnamento della **Lingua dei Segni Italiana (LIS)** con il robot umanoide **Pepper**, sviluppato come lavoro di tesi.
+Sistema di supporto all'insegnamento della **Lingua dei Segni Italiana (LIS)** basato sul robot umanoide **Pepper**, sviluppato come lavoro di tesi triennale in Informatica presso l'Università degli Studi di Salerno.
 
-L'utente chiede un segno a voce, dal tablet di Pepper o da un PC. Il sistema mostra il video del segno con lo scheletro della posa (DWPose), Pepper lo esegue con le braccia, e l'utente può riprodurlo davanti alla webcam e ricevere un punteggio.
+PepperSign affianca i docenti nell'insegnamento della LIS e offre agli studenti uno strumento di esercitazione individuale: Pepper usa le braccia e le mani per mostrare fisicamente i segni che lo studente vuole imparare.
+
+Rispetto a lavori simili, PepperSign si distingue per due aspetti:
+
+- **usa attivamente il tablet sul petto del robot** come interfaccia per lo studente, invece di considerarlo solo un ostacolo ai movimenti delle braccia;
+- **rende la creazione dei segni accessibile**: il docente può insegnare un segno a Pepper muovendogli direttamente le braccia, senza bisogno di competenze informatiche e senza dipendere dalle risorse di calcolo o dai dati di addestramento di un modello.
 
 ## Moduli
 
