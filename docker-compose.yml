@@ -18,14 +18,17 @@ services:
 
   # ---------- Modulo Web: Tomcat + JSP + API ----------
   web:
-    build: ./Web/PepperWebApp
+    build: ./3-WebApp/PepperWebApp
     image: peppersign/web:latest
     restart: unless-stopped
     environment:
       PEPPERSIGN_PROCESS_URL: http://process:5000
       PEPPERSIGN_DATA_DIR: /data/media
+      # gesti registrati con Controll: la WebApp ne ricava l'elenco dei gesti eseguibili
+      PEPPERSIGN_GESTURES_DIR: /data/gestures
     volumes:
       - ${PEPPERSIGN_MEDIA_DIR:-./data/media}:/data/media
+      - ${PEPPERSIGN_GESTURES_DIR:-./data/gestures}:/data/gestures:ro
     ports:
       - "${WEB_HTTP_PORT:-8080}:8080"
     depends_on:
@@ -34,7 +37,7 @@ services:
   # ---------- Modulo Process: Flask + DWPose + Whisper ----------
   process:
     build:
-      context: ./Process/VideoGeneration
+      context: ./2-Process/VideoGeneration
     image: peppersign/process:cpu
     restart: unless-stopped
     environment:
@@ -47,9 +50,9 @@ services:
     volumes:
       - ${PEPPERSIGN_MEDIA_DIR:-./data/media}:/data/media
       # modelli DWPose (.onnx): se la cartella e' vuota vengono scaricati al primo avvio
-      - ./Process/VideoGeneration/checkpoints:/app/checkpoints
+      - ./2-Process/VideoGeneration/checkpoints:/app/checkpoints
       # video sorgente locali opzionali (es. acqua.mp4)
-      - ./Process/VideoGeneration/assets:/app/assets
+      - ./2-Process/VideoGeneration/assets:/app/assets
       # cache dei modelli Whisper/HuggingFace (evita di riscaricarli)
       - model-cache:/root/.cache
     # Porta non esposta di default: la WebApp la raggiunge sulla rete interna.
@@ -59,7 +62,7 @@ services:
 
   # ---------- Modulo Controll: robot Pepper (Python 2.7 + NAOqi) ----------
   controll:
-    build: ./Controll
+    build: ./1-Controll
     image: peppersign/controll:latest
     restart: unless-stopped
     environment:

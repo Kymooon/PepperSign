@@ -1,0 +1,1777 @@
+{
+ "log": [
+  "[GESTURES] acqua_ready_#.json non valido, non verra' eseguito: formato ready_v# non piu' supportato: ricarica o registra di nuovo la sequenza (frames_v#)", 
+  "[GESTURES] rotto.json non valido, non verra' eseguito: mancano i frame (formato frames_v#)", 
+  "[GESTURES] Caricate # gesture da /tmp/ps_harness_Usq#en/gestures", 
+  "=== connect", 
+  "[#] Connessione QI...", 
+  "[DEMO] Robot simulato connesso (richiesto tcp://#.#:#)", 
+  "[DEMO] ALMotion.wakeUp()", 
+  "[DEMO] ALBasicAwareness.stopAwareness()", 
+  "[DEMO] ALTextToSpeech.setLanguage(Italian)", 
+  "[DEMO] ALSpeakingMovement.setMode(u'contextual')", 
+  "[OK] ALAnimatedSpeech disponibile", 
+  "[OK] Volume iniziale: #%", 
+  "[OK] Pepper connesso. Autonomous Life: solitary", 
+  "[INFO] Autonomia durante i gesti: pause", 
+  "=== attr robot_connected", 
+  "=== attr connection_state", 
+  "=== attr fake_robot", 
+  "=== attr robot_ip", 
+  "=== attr robot_port", 
+  "=== attr cached_volume", 
+  "=== attr cached_life_state", 
+  "=== attr reconnect_interval", 
+  "=== attr last_error", 
+  "=== attr connected_to_webapp", 
+  "=== attr last_cmd", 
+  "=== attr running", 
+  "=== say", 
+  "[DEMO] ALTextToSpeech.say(Ciao citt\u00e0)", 
+  "=== say vuoto", 
+  "=== say_animated", 
+  "[DEMO] ALSpeakingMovement.setMode(u'contextual')", 
+  "[DEMO] ALAnimatedSpeech.say(buongiorno)", 
+  "=== say_animated vuoto", 
+  "=== get_volume", 
+  "=== set_volume", 
+  "[DEMO] ALAudioDevice.setOutputVolume(#)", 
+  "=== set_volume #", 
+  "[DEMO] ALAudioDevice.setOutputVolume(#)", 
+  "=== volume_up", 
+  "[DEMO] ALAudioDevice.setOutputVolume(#)", 
+  "=== volume_down", 
+  "[DEMO] ALAudioDevice.setOutputVolume(#)", 
+  "=== attr cached_volume #", 
+  "=== life off", 
+  "[DEMO] ALBehaviorManager.stopAllBehaviors()", 
+  "[AUTO] stopAllBehaviors OK", 
+  "[DEMO] ALAutonomousLife.setState(disabled)", 
+  "[AUTO] Autonomous Life disabled (verificato)", 
+  "[AUTO] Basic Awareness stopped", 
+  "[DEMO] ALBackgroundMovement.setEnabled(False)", 
+  "[AUTO] Background Movement OFF OK", 
+  "[DEMO] ALListeningMovement.setEnabled(False)", 
+  "[AUTO] Listening Movement OFF OK", 
+  "[DEMO] ALSpeakingMovement.setEnabled(False)", 
+  "[AUTO] Speaking Movement OFF OK", 
+  "[DEMO] ALAutonomousBlinking.setEnabled(False)", 
+  "[AUTO] Autonomous Blinking OFF OK", 
+  "[DEMO] ALMotion.setBreathEnabled(Body, False)", 
+  "[AUTO] Breath Body OFF", 
+  "[DEMO] ALMotion.setIdlePostureEnabled(Body, False)", 
+  "[AUTO] Idle Posture Body OFF", 
+  "=== life state", 
+  "=== life on", 
+  "[DEMO] ALBackgroundMovement.setEnabled(True)", 
+  "[AUTO] Background Movement ON OK", 
+  "[DEMO] ALListeningMovement.setEnabled(True)", 
+  "[AUTO] Listening Movement ON OK", 
+  "[DEMO] ALAutonomousBlinking.setEnabled(True)", 
+  "[AUTO] Autonomous Blinking ON OK", 
+  "[DEMO] ALMotion.setBreathEnabled(Body, True)", 
+  "[AUTO] Breath Body ON", 
+  "[DEMO] ALMotion.setIdlePostureEnabled(Body, True)", 
+  "[AUTO] Idle Posture Body ON", 
+  "[DEMO] ALAutonomousLife.setState(interactive)", 
+  "[AUTO] Autonomous Life interactive (verificato)", 
+  "=== life state #", 
+  "=== attr cached_life_state #", 
+  "=== free_arms", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== hold_arms", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== free_left_arm", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== hold_left_arm", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== free_right_arm", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== hold_right_arm", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== move_only_left_arm", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== move_only_right_arm", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== free_head", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== hold_head", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== open_both_hands", 
+  "[DEMO] ALMotion.openHand(u'LHand')", 
+  "[DEMO] ALMotion.openHand(u'RHand')", 
+  "=== close_both_hands", 
+  "[DEMO] ALMotion.closeHand(u'LHand')", 
+  "[DEMO] ALMotion.closeHand(u'RHand')", 
+  "=== open_hand L", 
+  "[DEMO] ALMotion.openHand(u'LHand')", 
+  "=== close_hand R", 
+  "[DEMO] ALMotion.closeHand(u'RHand')", 
+  "=== set_hand bad", 
+  "=== set_stiffness", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== get_pose", 
+  "=== center_head_forward", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "=== prepare_gesture_recording", 
+  "[DEMO] ALBehaviorManager.stopAllBehaviors()", 
+  "[AUTO] stopAllBehaviors OK", 
+  "[DEMO] ALAutonomousLife.setState(disabled)", 
+  "[AUTO] Autonomous Life disabled (verificato)", 
+  "[AUTO] Basic Awareness stopped", 
+  "[DEMO] ALBackgroundMovement.setEnabled(False)", 
+  "[AUTO] Background Movement OFF OK", 
+  "[DEMO] ALListeningMovement.setEnabled(False)", 
+  "[AUTO] Listening Movement OFF OK", 
+  "[DEMO] ALSpeakingMovement.setEnabled(False)", 
+  "[AUTO] Speaking Movement OFF OK", 
+  "[DEMO] ALAutonomousBlinking.setEnabled(False)", 
+  "[AUTO] Autonomous Blinking OFF OK", 
+  "[DEMO] ALMotion.setBreathEnabled(Body, False)", 
+  "[AUTO] Breath Body OFF", 
+  "[DEMO] ALMotion.setIdlePostureEnabled(Body, False)", 
+  "[AUTO] Idle Posture Body OFF", 
+  "[DEMO] ALMotion.wakeUp()", 
+  "[REC] wakeUp OK", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== validate ok", 
+  "=== validate near/out", 
+  "=== validate nan", 
+  "=== validate len", 
+  "=== validate empty", 
+  "=== validate headpitch", 
+  "=== head_pitch_limits", 
+  "=== clamp", 
+  "=== build_interpolation", 
+  "=== build_interpolation short", 
+  "=== build_interpolation empty", 
+  "=== arm_collision_windows", 
+  "=== frame_dt", 
+  "=== native_joint_names", 
+  "=== normalize_collision_chain", 
+  "=== validate_robot_address", 
+  "=== validate_robot_address bad", 
+  "=== validate_robot_address port", 
+  "=== run_frames_gesture", 
+  "[LIMITI] Frame #: HeadYaw a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: HeadPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[SICUREZZA] Anti-collisione braccia (Arms) disattivata in: #-# s", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(LArm, True)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(RArm, True)", 
+  "=== run_frames_gesture empty", 
+  "=== play ciao", 
+  "[LIMITI] Frame #: HeadYaw a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: HeadPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[SICUREZZA] Anti-collisione braccia (Arms) disattivata in: #-# s", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(LArm, True)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(RArm, True)", 
+  "=== play acqua", 
+  "[GESTO] Gesto non valido, non eseguito: formato ready_v# non piu' supportato: ricarica o registra di nuovo la sequenza (frames_v#)", 
+  "=== play missing", 
+  "=== play empty", 
+  "=== go_to_pose", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "=== go_to_pose bad", 
+  "=== pose after", 
+  "=== soft state #", 
+  "=== soft bad group", 
+  "=== soft start", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== soft state #", 
+  "=== soft stop", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== soft stop again", 
+  "=== soft start #", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "=== gesture while soft", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[MORBIDO] Disattivato per eseguire il movimento (braccia rigide)", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "=== soft state #", 
+  "=== refresh_protections", 
+  "=== attr cached_protections", 
+  "=== set_protection off", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(Arms, False)", 
+  "[SICUREZZA] Anti-collisione con il proprio corpo (braccia) DISATTIVATA", 
+  "=== set_protection diag", 
+  "=== set_protection unknown", 
+  "=== set_protection ext", 
+  "[DEMO] ALMotion.setExternalCollisionProtectionEnabled(LArm, False)", 
+  "[SICUREZZA] Anti-collisione esterna braccio SX DISATTIVATA", 
+  "=== restore_protections", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(Arms, True)", 
+  "[SICUREZZA] Anti-collisione con il proprio corpo (braccia) ATTIVATA", 
+  "[DEMO] ALMotion.setExternalCollisionProtectionEnabled(LArm, True)", 
+  "[SICUREZZA] Anti-collisione esterna braccio SX ATTIVATA", 
+  "=== restore_protections #", 
+  "=== simulate_obstacle", 
+  "=== refresh_obstacles", 
+  "=== attr cached_obstacles", 
+  "=== simulate_obstacle off", 
+  "=== refresh_temperatures", 
+  "=== temperatures keys", 
+  "=== hottest_joint", 
+  "=== temperature_level", 
+  "=== temperature_level status", 
+  "=== safety_counts", 
+  "=== safety_events keys", 
+  "=== reset_safety_counts", 
+  "=== handle_command SAY", 
+  "[DEMO] ALTextToSpeech.say(ciao)", 
+  "=== handle_command animated_say", 
+  "[DEMO] ALSpeakingMovement.setMode(u'contextual')", 
+  "[DEMO] ALAnimatedSpeech.say(ok)", 
+  "=== handle_command PLAY_GESTURE", 
+  "[LIMITI] Frame #: HeadYaw a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: HeadPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[SICUREZZA] Anti-collisione braccia (Arms) disattivata in: #-# s", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(LArm, True)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(RArm, True)", 
+  "=== handle_command PLAY_GESTURE", 
+  "[GESTURE] FAIL: gestureId non mappato: xx", 
+  "=== handle_command WAKEUP", 
+  "[DEMO] ALMotion.wakeUp()", 
+  "=== handle_command REST", 
+  "[DEMO] ALMotion.rest()", 
+  "=== handle_command LIFE_OFF", 
+  "[DEMO] ALBehaviorManager.stopAllBehaviors()", 
+  "[AUTO] stopAllBehaviors OK", 
+  "[DEMO] ALAutonomousLife.setState(disabled)", 
+  "[AUTO] Autonomous Life disabled (verificato)", 
+  "[AUTO] Basic Awareness stopped", 
+  "[DEMO] ALBackgroundMovement.setEnabled(False)", 
+  "[AUTO] Background Movement OFF OK", 
+  "[DEMO] ALListeningMovement.setEnabled(False)", 
+  "[AUTO] Listening Movement OFF OK", 
+  "[DEMO] ALSpeakingMovement.setEnabled(False)", 
+  "[AUTO] Speaking Movement OFF OK", 
+  "[DEMO] ALAutonomousBlinking.setEnabled(False)", 
+  "[AUTO] Autonomous Blinking OFF OK", 
+  "[DEMO] ALMotion.setBreathEnabled(Body, False)", 
+  "[AUTO] Breath Body OFF", 
+  "[DEMO] ALMotion.setIdlePostureEnabled(Body, False)", 
+  "[AUTO] Idle Posture Body OFF", 
+  "=== handle_command LIFE_ON", 
+  "[DEMO] ALBackgroundMovement.setEnabled(True)", 
+  "[AUTO] Background Movement ON OK", 
+  "[DEMO] ALListeningMovement.setEnabled(True)", 
+  "[AUTO] Listening Movement ON OK", 
+  "[DEMO] ALAutonomousBlinking.setEnabled(True)", 
+  "[AUTO] Autonomous Blinking ON OK", 
+  "[DEMO] ALMotion.setBreathEnabled(Body, True)", 
+  "[AUTO] Breath Body ON", 
+  "[DEMO] ALMotion.setIdlePostureEnabled(Body, True)", 
+  "[AUTO] Idle Posture Body ON", 
+  "[DEMO] ALAutonomousLife.setState(interactive)", 
+  "[AUTO] Autonomous Life interactive (verificato)", 
+  "=== handle_command NONE", 
+  "=== handle_command ", 
+  "=== handle_command BOH", 
+  "[POLL] Azione sconosciuta: BOH", 
+  "=== handle_command SAY_AND_LISTEN", 
+  "[DEMO] ALTextToSpeech.say(parla)", 
+  ">>> Registrazione in corso (# sec)...", 
+  "[DEMO] ALAudioRecorder.stopMicrophonesRecording()", 
+  "[DEMO] ALAudioRecorder.startMicrophonesRecording(/tmp/rec_utente.wav)", 
+  "[DEMO] ALAudioRecorder.stopMicrophonesRecording()", 
+  "[DEMO] ALFileManager.getFileContents(/tmp/rec_utente.wav)", 
+  "[DEMO] ALTextToSpeech.say(Errore durante l'invio.)", 
+  "[SAY_AND_LISTEN] FAIL: upload exc: <urlopen error [Errno #] Connection refused>", 
+  "=== handle_command SAY_AND_LISTEN", 
+  "[SAY_AND_LISTEN] FAIL: sessionId mancante", 
+  "=== wakeup", 
+  "[DEMO] ALMotion.wakeUp()", 
+  "=== rest", 
+  "[DEMO] ALMotion.rest()", 
+  "=== set_error", 
+  "[ERR] errore di prova", 
+  "=== attr last_error", 
+  "[POLL] Avviato. Endpoint: http://#.#:#/api/pepper/next", 
+  "[DEMO] ALTextToSpeech.say(Connessione alla Web App riuscita. Sono pronto.)", 
+  "[DEMO] ALTextToSpeech.say(dal web)", 
+  "[LIMITI] Frame #: HeadYaw a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: HeadPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: LHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RShoulderPitch a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RElbowRoll a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[LIMITI] Frame #: RHand a # rad/s (#% del massimo #): aumenta il dt di quel frame", 
+  "[DEMO] ALMotion.setBreathEnabled(Arms, False)", 
+  "[DEMO] ALMotion.setIdlePostureEnabled(Arms, False)", 
+  "[DEMO] ALAutonomousLife.setAutonomousAbilityEnabled(BackgroundMovement, False)", 
+  "[DEMO] ALAutonomousLife.setAutonomousAbilityEnabled(ListeningMovement, False)", 
+  "[AUTONOMY] Pausa per il gesto (pause): Breath Arms, IdlePosture Arms, BackgroundMovement, ListeningMovement", 
+  "[DEMO] ALMotion.setStiffnesses(# giunti, #)", 
+  "[SICUREZZA] Anti-collisione braccia (Arms) disattivata in: #-# s", 
+  "[DEMO] ALMotion.angleInterpolation(# giunti, # keyframe, #s)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(LArm, True)", 
+  "[DEMO] ALMotion.setCollisionProtectionEnabled(RArm, True)", 
+  "[DEMO] ALAutonomousLife.setAutonomousAbilityEnabled(ListeningMovement, True)", 
+  "[DEMO] ALAutonomousLife.setAutonomousAbilityEnabled(BackgroundMovement, True)", 
+  "[DEMO] ALMotion.setIdlePostureEnabled(Arms, True)", 
+  "[DEMO] ALMotion.setBreathEnabled(Arms, True)", 
+  "[AUTONOMY] Movimenti autonomi ripristinati", 
+  "=== poll served", 
+  "=== poll connected", 
+  "=== poll last_cmd", 
+  "[DEMO] ALTextToSpeech.say(Ho perso la connessione con il computer.)", 
+  "[ERR] Polling WebApp fallito: [Errno #] Connection reset by peer", 
+  "=== poll lost", 
+  "=== monitor cache volume", 
+  "=== simulate_disconnect", 
+  "[ROBOT] Connessione con Pepper persa.", 
+  "[ERR] Connessione con il robot persa (sessione NAOqi chiusa). Riconnessione automatica attiva.", 
+  "=== monitor disconnected", 
+  "[#] Connessione QI...", 
+  "[DEMO] Robot simulato connesso (richiesto tcp://#.#:#)", 
+  "[DEMO] ALMotion.wakeUp()", 
+  "[DEMO] ALTextToSpeech.setLanguage(Italian)", 
+  "[DEMO] ALSpeakingMovement.setMode(u'contextual')", 
+  "[OK] ALAnimatedSpeech disponibile", 
+  "[OK] Volume iniziale: #%", 
+  "[OK] Pepper connesso. Autonomous Life: interactive", 
+  "[INFO] Autonomia durante i gesti: pause", 
+  "[ROBOT] Riconnessione riuscita.", 
+  "=== monitor reconnected", 
+  "=== configure_target bad", 
+  "=== configure_target demo", 
+  "[ROBOT] Nuova destinazione: DEMO - robot simulato (#.#:#)", 
+  "[#] Connessione QI...", 
+  "[DEMO] Robot simulato connesso (richiesto tcp://#.#:#)", 
+  "[DEMO] ALMotion.wakeUp()", 
+  "[DEMO] ALTextToSpeech.setLanguage(Italian)", 
+  "[DEMO] ALSpeakingMovement.setMode(u'contextual')", 
+  "[OK] ALAnimatedSpeech disponibile", 
+  "[OK] Volume iniziale: #%", 
+  "[OK] Pepper connesso. Autonomous Life: interactive", 
+  "[INFO] Autonomia durante i gesti: pause", 
+  "[ROBOT] Riconnessione riuscita.", 
+  "=== after configure", 
+  "=== request_reconnect", 
+  "[ROBOT] Riconnessione richiesta dall'utente...", 
+  "[#] Connessione QI...", 
+  "[DEMO] Robot simulato connesso (richiesto tcp://#.#:#)", 
+  "[DEMO] ALMotion.wakeUp()", 
+  "[DEMO] ALTextToSpeech.setLanguage(Italian)", 
+  "[DEMO] ALSpeakingMovement.setMode(u'contextual')", 
+  "[OK] ALAnimatedSpeech disponibile", 
+  "[OK] Volume iniziale: #%", 
+  "[OK] Pepper connesso. Autonomous Life: interactive", 
+  "[INFO] Autonomia durante i gesti: pause", 
+  "[ROBOT] Riconnessione riuscita.", 
+  "=== after reconnect"
+ ], 
+ "module": [
+  "ARM_ABILITIES", 
+  "ARM_COLLISION_CHAINS", 
+  "ARM_JOINTS", 
+  "ArmCollisionScheduler", 
+  "AutonomyManager", 
+  "ConnectionMonitor", 
+  "EXEC_LIMIT_MARGIN", 
+  "GESTURE_AUTONOMY_MODES", 
+  "GesturePlayer", 
+  "HEAD_JOINTS", 
+  "HEAD_PITCH_CLAMP", 
+  "InvalidGesture", 
+  "JointLimits", 
+  "LEFT_ARM_JOINTS", 
+  "NO_ARM_COLLISION_KEY", 
+  "OBSTACLE_MAX_DISTANCE", 
+  "PROTECTIONS", 
+  "PepperController", 
+  "RIGHT_ARM_JOINTS", 
+  "Recording", 
+  "RobotSession", 
+  "SAFETY_CHAINS", 
+  "SERVICE_ATTRS", 
+  "SOFT_ARM_JOINTS", 
+  "SOFT_DEFAULT_STIFFNESS", 
+  "SOFT_FOLLOW_SPEED", 
+  "SOFT_FOLLOW_THRESHOLD", 
+  "SOFT_PERIOD", 
+  "SafetyMonitor", 
+  "SoftHold", 
+  "Speech", 
+  "TEMPERATURE_HOT", 
+  "TEMPERATURE_JOINTS", 
+  "TEMPERATURE_PERIOD_TICKS", 
+  "TEMPERATURE_WARM", 
+  "VELOCITY_WARN_FRACTION", 
+  "WebAppBridge", 
+  "absolute_import", 
+  "arm_collision_windows", 
+  "check_frames", 
+  "check_gesture", 
+  "frame_dt", 
+  "head_pitch_limits", 
+  "load_qi", 
+  "native_joint_names", 
+  "normalize_collision_chain", 
+  "safe_unicode", 
+  "summarize", 
+  "validate_robot_address"
+ ], 
+ "results": [
+  [
+   "connect", 
+   "ok", 
+   null
+  ], 
+  [
+   "attr robot_connected", 
+   "ok", 
+   true
+  ], 
+  [
+   "attr connection_state", 
+   "ok", 
+   "CONNESSO"
+  ], 
+  [
+   "attr fake_robot", 
+   "ok", 
+   true
+  ], 
+  [
+   "attr robot_ip", 
+   "ok", 
+   "127.0.0.1"
+  ], 
+  [
+   "attr robot_port", 
+   "ok", 
+   9559
+  ], 
+  [
+   "attr cached_volume", 
+   "ok", 
+   60
+  ], 
+  [
+   "attr cached_life_state", 
+   "ok", 
+   "solitary"
+  ], 
+  [
+   "attr reconnect_interval", 
+   "ok", 
+   5.0
+  ], 
+  [
+   "attr last_error", 
+   "ok", 
+   ""
+  ], 
+  [
+   "attr connected_to_webapp", 
+   "ok", 
+   false
+  ], 
+  [
+   "attr last_cmd", 
+   "ok", 
+   null
+  ], 
+  [
+   "attr running", 
+   "ok", 
+   true
+  ], 
+  [
+   "say", 
+   "ok", 
+   [
+    true, 
+    "detto"
+   ]
+  ], 
+  [
+   "say vuoto", 
+   "ok", 
+   [
+    false, 
+    "testo vuoto"
+   ]
+  ], 
+  [
+   "say_animated", 
+   "ok", 
+   [
+    true, 
+    "animated speech ok"
+   ]
+  ], 
+  [
+   "say_animated vuoto", 
+   "ok", 
+   [
+    false, 
+    "testo vuoto"
+   ]
+  ], 
+  [
+   "get_volume", 
+   "ok", 
+   [
+    true, 
+    60
+   ]
+  ], 
+  [
+   "set_volume", 
+   "ok", 
+   [
+    true, 
+    "Volume impostato a 55%"
+   ]
+  ], 
+  [
+   "set_volume 150", 
+   "ok", 
+   [
+    true, 
+    "Volume impostato a 100%"
+   ]
+  ], 
+  [
+   "volume_up", 
+   "ok", 
+   [
+    true, 
+    "Volume aumentato a 100%"
+   ]
+  ], 
+  [
+   "volume_down", 
+   "ok", 
+   [
+    true, 
+    "Volume abbassato a 75%"
+   ]
+  ], 
+  [
+   "attr cached_volume 2", 
+   "ok", 
+   75
+  ], 
+  [
+   "life off", 
+   "ok", 
+   [
+    true, 
+    "Modalita' manuale attivata: Autonomous Life disabled, movimenti autonomi disattivati"
+   ]
+  ], 
+  [
+   "life state", 
+   "ok", 
+   "disabled"
+  ], 
+  [
+   "life on", 
+   "ok", 
+   [
+    true, 
+    "Autonomous Life: interactive"
+   ]
+  ], 
+  [
+   "life state 2", 
+   "ok", 
+   "interactive"
+  ], 
+  [
+   "attr cached_life_state 2", 
+   "ok", 
+   "interactive"
+  ], 
+  [
+   "free_arms", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 0.00 su list"
+   ]
+  ], 
+  [
+   "hold_arms", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 1.00 su list"
+   ]
+  ], 
+  [
+   "free_left_arm", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 0.00 su list"
+   ]
+  ], 
+  [
+   "hold_left_arm", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 1.00 su list"
+   ]
+  ], 
+  [
+   "free_right_arm", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 0.00 su list"
+   ]
+  ], 
+  [
+   "hold_right_arm", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 1.00 su list"
+   ]
+  ], 
+  [
+   "move_only_left_arm", 
+   "ok", 
+   [
+    true, 
+    "Solo braccio SX libero | Stiffness set a 1.00 su list | Stiffness set a 0.00 su list"
+   ]
+  ], 
+  [
+   "move_only_right_arm", 
+   "ok", 
+   [
+    true, 
+    "Solo braccio DX libero | Stiffness set a 1.00 su list | Stiffness set a 0.00 su list"
+   ]
+  ], 
+  [
+   "free_head", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 0.00 su list"
+   ]
+  ], 
+  [
+   "hold_head", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 1.00 su list"
+   ]
+  ], 
+  [
+   "open_both_hands", 
+   "ok", 
+   [
+    true, 
+    "LHand aperta | RHand aperta"
+   ]
+  ], 
+  [
+   "close_both_hands", 
+   "ok", 
+   [
+    true, 
+    "LHand chiusa | RHand chiusa"
+   ]
+  ], 
+  [
+   "open_hand L", 
+   "ok", 
+   [
+    true, 
+    "LHand aperta"
+   ]
+  ], 
+  [
+   "close_hand R", 
+   "ok", 
+   [
+    true, 
+    "RHand chiusa"
+   ]
+  ], 
+  [
+   "set_hand bad", 
+   "ok", 
+   [
+    false, 
+    "hand non valida: XHand"
+   ]
+  ], 
+  [
+   "set_stiffness", 
+   "ok", 
+   [
+    true, 
+    "Stiffness set a 0.50 su list"
+   ]
+  ], 
+  [
+   "get_pose", 
+   "ok", 
+   [
+    true, 
+    [
+     0.0, 
+     -0.2, 
+     1.5, 
+     0.15, 
+     -1.2, 
+     -0.5, 
+     0.0, 
+     1.0, 
+     1.5, 
+     -0.15, 
+     1.2, 
+     0.5, 
+     0.0, 
+     0.0
+    ], 
+    "posa letta"
+   ]
+  ], 
+  [
+   "center_head_forward", 
+   "ok", 
+   [
+    true, 
+    "Testa centrata: guarda dritto davanti a se'"
+   ]
+  ], 
+  [
+   "prepare_gesture_recording", 
+   "ok", 
+   [
+    true, 
+    "Registrazione pronta | Modalita' manuale attivata: Autonomous Life disabled, movimenti autonomi disattivati | Testa centrata: guarda dritto davanti a se' | Stiffness set a 0.00 su list | Stiffness set a 1.00 su list"
+   ]
+  ], 
+  [
+   "validate ok", 
+   "ok", 
+   [
+    true, 
+    [], 
+    []
+   ]
+  ], 
+  [
+   "validate near/out", 
+   "ok", 
+   [
+    false, 
+    [
+     "HeadPitch vicino al limite massimo: 0.4400 / max 0.4451", 
+     "LShoulderPitch vicino al limite massimo: 2.0800 / max 2.0857"
+    ], 
+    [
+     "RElbowRoll fuori limite: 3.0000 non in [0.0087, 1.5620]"
+    ]
+   ]
+  ], 
+  [
+   "validate nan", 
+   "ok", 
+   [
+    false, 
+    [], 
+    [
+     "HeadYaw ha un valore non valido: nan", 
+     "HeadPitch ha un valore non valido: nan", 
+     "LShoulderPitch ha un valore non valido: nan", 
+     "LShoulderRoll ha un valore non valido: nan", 
+     "LElbowYaw ha un valore non valido: nan", 
+     "LElbowRoll ha un valore non valido: nan", 
+     "LWristYaw ha un valore non valido: nan", 
+     "LHand ha un valore non valido: nan", 
+     "RShoulderPitch ha un valore non valido: nan", 
+     "RShoulderRoll ha un valore non valido: nan", 
+     "RElbowYaw ha un valore non valido: nan", 
+     "RElbowRoll ha un valore non valido: nan", 
+     "RWristYaw ha un valore non valido: nan", 
+     "RHand ha un valore non valido: nan"
+    ]
+   ]
+  ], 
+  [
+   "validate len", 
+   "ok", 
+   [
+    false, 
+    [], 
+    [
+     "numero angoli non coerente: attesi 14, ricevuti 1"
+    ]
+   ]
+  ], 
+  [
+   "validate empty", 
+   "ok", 
+   [
+    false, 
+    [], 
+    [
+     "lista joints vuota"
+    ]
+   ]
+  ], 
+  [
+   "validate headpitch", 
+   "ok", 
+   [
+    true, 
+    [
+     "HeadPitch vicino al limite massimo: 0.4000 / max 0.4451", 
+     "HeadPitch 0.400 fuori dal range consentito con HeadYaw 1.90 ([-0.612, 0.236]): in esecuzione verra' limitato"
+    ], 
+    []
+   ]
+  ], 
+  [
+   "head_pitch_limits", 
+   "ok", 
+   [
+    -0.6139, 
+    0.3338
+   ]
+  ], 
+  [
+   "clamp", 
+   "ok", 
+   [
+    2.0757, 
+    0.2356, 
+    2.0757, 
+    0.0187, 
+    2.0757, 
+    -0.0187, 
+    1.8139, 
+    1.0, 
+    -2.0757, 
+    -0.0187, 
+    -2.0757, 
+    0.0187, 
+    1.8139, 
+    0.0
+   ]
+  ], 
+  [
+   "build_interpolation", 
+   "ok", 
+   [
+    [
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ], 
+     [
+      0.8, 
+      0.85, 
+      2.05
+     ]
+    ], 
+    [
+     [
+      0.0, 
+      0.3, 
+      0.0
+     ], 
+     [
+      -0.2, 
+      0.3, 
+      -0.2
+     ], 
+     [
+      1.5, 
+      0.2, 
+      1.5
+     ], 
+     [
+      0.15, 
+      0.3, 
+      0.15
+     ], 
+     [
+      -1.2, 
+      -1.0, 
+      -1.2
+     ], 
+     [
+      -0.5, 
+      -1.2, 
+      -0.5
+     ], 
+     [
+      0.0, 
+      0.5, 
+      0.0
+     ], 
+     [
+      0.6, 
+      1.0, 
+      0.6
+     ], 
+     [
+      1.5, 
+      -0.5, 
+      1.5
+     ], 
+     [
+      -0.15, 
+      -0.4, 
+      -0.15
+     ], 
+     [
+      1.2, 
+      1.1, 
+      1.2
+     ], 
+     [
+      0.5, 
+      1.4, 
+      0.5
+     ], 
+     [
+      0.0, 
+      -0.3, 
+      0.0
+     ], 
+     [
+      0.6, 
+      0.0, 
+      0.6
+     ]
+    ]
+   ]
+  ], 
+  [
+   "build_interpolation short", 
+   "exc", 
+   "InvalidGesture: frame 1: 1 angoli invece di 14"
+  ], 
+  [
+   "build_interpolation empty", 
+   "ok", 
+   [
+    null, 
+    null
+   ]
+  ], 
+  [
+   "arm_collision_windows", 
+   "ok", 
+   [
+    [
+     0.8, 
+     2.05
+    ]
+   ]
+  ], 
+  [
+   "frame_dt", 
+   "ok", 
+   0.05
+  ], 
+  [
+   "native_joint_names", 
+   "ok", 
+   [
+    "LHand"
+   ]
+  ], 
+  [
+   "normalize_collision_chain", 
+   "ok", 
+   "Arms"
+  ], 
+  [
+   "validate_robot_address", 
+   "ok", 
+   [
+    true, 
+    "127.0.0.1", 
+    9559, 
+    ""
+   ]
+  ], 
+  [
+   "validate_robot_address bad", 
+   "ok", 
+   [
+    false, 
+    "a b", 
+    1, 
+    "Indirizzo non valido: a b (scrivi solo l'IP, es. 192.168.0.110)"
+   ]
+  ], 
+  [
+   "validate_robot_address port", 
+   "ok", 
+   [
+    false, 
+    "127.0.0.1", 
+    70000, 
+    "Porta fuori intervallo: 70000"
+   ]
+  ], 
+  [
+   "run_frames_gesture", 
+   "ok", 
+   [
+    true, 
+    "gesture eseguita (3 frame)"
+   ]
+  ], 
+  [
+   "run_frames_gesture empty", 
+   "ok", 
+   [
+    false, 
+    "joints/frames mancanti"
+   ]
+  ], 
+  [
+   "play ciao", 
+   "ok", 
+   [
+    true, 
+    "gesture eseguita (3 frame)"
+   ]
+  ], 
+  [
+   "play acqua", 
+   "ok", 
+   [
+    false, 
+    "Gesto non valido, non eseguito: formato ready_v1 non piu' supportato: ricarica o registra di nuovo la sequenza (frames_v1)"
+   ]
+  ], 
+  [
+   "play missing", 
+   "ok", 
+   [
+    false, 
+    "gestureId non mappato: nessuno"
+   ]
+  ], 
+  [
+   "play empty", 
+   "ok", 
+   [
+    false, 
+    "gestureId vuoto"
+   ]
+  ], 
+  [
+   "go_to_pose", 
+   "ok", 
+   [
+    true, 
+    "Posa raggiunta in 2.5 s"
+   ]
+  ], 
+  [
+   "go_to_pose bad", 
+   "ok", 
+   [
+    false, 
+    "joints/angles non validi"
+   ]
+  ], 
+  [
+   "pose after", 
+   "ok", 
+   [
+    true, 
+    [
+     0.3, 
+     0.3, 
+     0.2, 
+     0.3, 
+     -1.0, 
+     -1.2, 
+     0.5, 
+     1.0, 
+     -0.5, 
+     -0.4, 
+     1.1, 
+     1.4, 
+     -0.3, 
+     0.0
+    ], 
+    "posa letta"
+   ]
+  ], 
+  [
+   "soft state 0", 
+   "ok", 
+   null
+  ], 
+  [
+   "soft bad group", 
+   "ok", 
+   [
+    false, 
+    "gruppo non valido: x"
+   ]
+  ], 
+  [
+   "soft start", 
+   "ok", 
+   [
+    true, 
+    "Braccia morbide: braccio SX (stiffness 0.40). Sposta il braccio e lascialo: resta in posizione."
+   ]
+  ], 
+  [
+   "soft state 1", 
+   "ok", 
+   [
+    "left", 
+    0.4
+   ]
+  ], 
+  [
+   "soft stop", 
+   "ok", 
+   [
+    true, 
+    "Braccia morbide disattivate (braccia rigide)"
+   ]
+  ], 
+  [
+   "soft stop again", 
+   "ok", 
+   [
+    false, 
+    "Braccia morbide gia' disattivate"
+   ]
+  ], 
+  [
+   "soft start 2", 
+   "ok", 
+   [
+    true, 
+    "Braccia morbide: entrambe le braccia (stiffness 0.40). Sposta il braccio e lascialo: resta in posizione."
+   ]
+  ], 
+  [
+   "gesture while soft", 
+   "ok", 
+   [
+    true, 
+    "gesture eseguita (1 frame)"
+   ]
+  ], 
+  [
+   "soft state 2", 
+   "ok", 
+   null
+  ], 
+  [
+   "refresh_protections", 
+   "ok", 
+   null
+  ], 
+  [
+   "attr cached_protections", 
+   "ok", 
+   {
+    "diagnosis": true, 
+    "external_LArm": true, 
+    "external_RArm": true, 
+    "self_Arms": true, 
+    "smart_stiffness": true
+   }
+  ], 
+  [
+   "set_protection off", 
+   "ok", 
+   [
+    true, 
+    "Anti-collisione con il proprio corpo (braccia) disattivata"
+   ]
+  ], 
+  [
+   "set_protection diag", 
+   "ok", 
+   [
+    false, 
+    "Riduzione della forza per temperatura/errori: non modificabile dal pannello (protegge i motori)"
+   ]
+  ], 
+  [
+   "set_protection unknown", 
+   "ok", 
+   [
+    false, 
+    "protezione sconosciuta: zzz"
+   ]
+  ], 
+  [
+   "set_protection ext", 
+   "ok", 
+   [
+    true, 
+    "Anti-collisione esterna braccio SX disattivata"
+   ]
+  ], 
+  [
+   "restore_protections", 
+   "ok", 
+   [
+    true, 
+    "Protezioni ripristinate: Anti-collisione con il proprio corpo (braccia) attivata; Anti-collisione esterna braccio SX attivata"
+   ]
+  ], 
+  [
+   "restore_protections 2", 
+   "ok", 
+   [
+    true, 
+    "Nessuna protezione da ripristinare"
+   ]
+  ], 
+  [
+   "simulate_obstacle", 
+   "ok", 
+   [
+    true, 
+    "Ostacolo simulato a (0.25, -0.35) m"
+   ]
+  ], 
+  [
+   "refresh_obstacles", 
+   "ok", 
+   null
+  ], 
+  [
+   "attr cached_obstacles", 
+   "ok", 
+   {
+    "LArm": {
+     "distance": 0.5099, 
+     "position": [
+      0.25, 
+      -0.35, 
+      0.0
+     ], 
+     "side": "davanti a destra"
+    }, 
+    "RArm": {
+     "distance": 0.2236, 
+     "position": [
+      0.25, 
+      -0.35, 
+      0.0
+     ], 
+     "side": "davanti a destra"
+    }
+   }
+  ], 
+  [
+   "simulate_obstacle off", 
+   "ok", 
+   [
+    true, 
+    "Ostacolo simulato rimosso"
+   ]
+  ], 
+  [
+   "refresh_temperatures", 
+   "ok", 
+   null
+  ], 
+  [
+   "temperatures keys", 
+   "ok", 
+   [
+    "HeadPitch", 
+    "HeadYaw", 
+    "LElbowRoll", 
+    "LElbowYaw", 
+    "LHand", 
+    "LShoulderPitch", 
+    "LShoulderRoll", 
+    "LWristYaw", 
+    "RElbowRoll", 
+    "RElbowYaw", 
+    "RHand", 
+    "RShoulderPitch", 
+    "RShoulderRoll", 
+    "RWristYaw"
+   ]
+  ], 
+  [
+   "hottest_joint", 
+   "ok", 
+   [
+    "LShoulderRoll", 
+    35.1
+   ]
+  ], 
+  [
+   "temperature_level", 
+   "ok", 
+   1
+  ], 
+  [
+   "temperature_level status", 
+   "ok", 
+   2
+  ], 
+  [
+   "safety_counts", 
+   "ok", 
+   {
+    "LArm": 0, 
+    "RArm": 0
+   }
+  ], 
+  [
+   "safety_events keys", 
+   "ok", 
+   [
+    "LArm", 
+    "RArm"
+   ]
+  ], 
+  [
+   "reset_safety_counts", 
+   "ok", 
+   null
+  ], 
+  [
+   "handle_command SAY", 
+   "ok", 
+   [
+    true, 
+    "detto"
+   ]
+  ], 
+  [
+   "handle_command animated_say", 
+   "ok", 
+   [
+    true, 
+    "animated speech ok"
+   ]
+  ], 
+  [
+   "handle_command PLAY_GESTURE", 
+   "ok", 
+   [
+    true, 
+    "gesture eseguita (3 frame)"
+   ]
+  ], 
+  [
+   "handle_command PLAY_GESTURE", 
+   "ok", 
+   [
+    false, 
+    "gestureId non mappato: xx"
+   ]
+  ], 
+  [
+   "handle_command WAKEUP", 
+   "ok", 
+   [
+    true, 
+    "wakeUp eseguito"
+   ]
+  ], 
+  [
+   "handle_command REST", 
+   "ok", 
+   [
+    true, 
+    "rest eseguito"
+   ]
+  ], 
+  [
+   "handle_command LIFE_OFF", 
+   "ok", 
+   [
+    true, 
+    "Modalita' manuale attivata: Autonomous Life disabled, movimenti autonomi disattivati"
+   ]
+  ], 
+  [
+   "handle_command LIFE_ON", 
+   "ok", 
+   [
+    true, 
+    "Autonomous Life: interactive"
+   ]
+  ], 
+  [
+   "handle_command NONE", 
+   "ok", 
+   null
+  ], 
+  [
+   "handle_command ", 
+   "ok", 
+   null
+  ], 
+  [
+   "handle_command BOH", 
+   "ok", 
+   [
+    false, 
+    "azione sconosciuta: BOH"
+   ]
+  ], 
+  [
+   "handle_command SAY_AND_LISTEN", 
+   "ok", 
+   [
+    false, 
+    "upload exc: <urlopen error [Errno 111] Connection refused>"
+   ]
+  ], 
+  [
+   "handle_command SAY_AND_LISTEN", 
+   "ok", 
+   [
+    false, 
+    "sessionId mancante"
+   ]
+  ], 
+  [
+   "wakeup", 
+   "ok", 
+   [
+    true, 
+    "wakeUp eseguito"
+   ]
+  ], 
+  [
+   "rest", 
+   "ok", 
+   [
+    true, 
+    "rest eseguito"
+   ]
+  ], 
+  [
+   "set_error", 
+   "ok", 
+   null
+  ], 
+  [
+   "attr last_error", 
+   "ok", 
+   "errore di prova"
+  ], 
+  [
+   "poll served", 
+   "ok", 
+   [
+    "SAY", 
+    "PLAY_GESTURE", 
+    "NONE"
+   ]
+  ], 
+  [
+   "poll connected", 
+   "ok", 
+   true
+  ], 
+  [
+   "poll last_cmd", 
+   "ok", 
+   {
+    "action": "NONE"
+   }
+  ], 
+  [
+   "poll lost", 
+   "ok", 
+   false
+  ], 
+  [
+   "monitor cache volume", 
+   "ok", 
+   75
+  ], 
+  [
+   "simulate_disconnect", 
+   "ok", 
+   [
+    true, 
+    "Robot simulato offline per 1 s"
+   ]
+  ], 
+  [
+   "monitor disconnected", 
+   "ok", 
+   [
+    false, 
+    "DISCONNESSO"
+   ]
+  ], 
+  [
+   "monitor reconnected", 
+   "ok", 
+   [
+    true, 
+    "CONNESSO"
+   ]
+  ], 
+  [
+   "configure_target bad", 
+   "ok", 
+   [
+    false, 
+    "Indirizzo non valido: a b (scrivi solo l'IP, es. 192.168.0.110)"
+   ]
+  ], 
+  [
+   "configure_target demo", 
+   "ok", 
+   [
+    true, 
+    "Connessione a robot simulato 10.0.0.5:9600 in corso..."
+   ]
+  ], 
+  [
+   "after configure", 
+   "ok", 
+   [
+    true, 
+    "10.0.0.5", 
+    9600, 
+    true
+   ]
+  ], 
+  [
+   "request_reconnect", 
+   "ok", 
+   null
+  ], 
+  [
+   "after reconnect", 
+   "ok", 
+   true
+  ]
+ ], 
+ "surface": [
+  "ARM_ABILITIES", 
+  "GESTURE_AUTONOMY_MODES", 
+  "anim_player", 
+  "animated_speech", 
+  "audio_device", 
+  "autonomous_blinking", 
+  "autonomous_life", 
+  "autonomy", 
+  "background_movement", 
+  "basic_awareness", 
+  "behavior", 
+  "build_interpolation_from_frames", 
+  "cached_life_state", 
+  "cached_obstacles", 
+  "cached_protections", 
+  "cached_temperatures", 
+  "cached_volume", 
+  "center_head_forward", 
+  "clamp_angles_to_limits", 
+  "close_both_hands", 
+  "close_hand", 
+  "collision", 
+  "command_handlers", 
+  "config", 
+  "configure_target", 
+  "connect", 
+  "connected_to_webapp", 
+  "connection_state", 
+  "disable_autonomous_stack", 
+  "fake_robot", 
+  "fileman", 
+  "free_arms", 
+  "free_head", 
+  "free_left_arm", 
+  "free_right_arm", 
+  "gesture_store", 
+  "get_autonomous_life_state", 
+  "get_pose", 
+  "get_volume", 
+  "go_to_pose", 
+  "handle_command", 
+  "head_pitch_limits", 
+  "hold_arms", 
+  "hold_head", 
+  "hold_left_arm", 
+  "hold_right_arm", 
+  "hottest_joint", 
+  "joint_limits", 
+  "joint_velocity", 
+  "last_cmd", 
+  "last_error", 
+  "limits", 
+  "listening_movement", 
+  "lock", 
+  "log", 
+  "log_cb", 
+  "memory", 
+  "monitor", 
+  "monitor_loop", 
+  "motion", 
+  "move_only_left_arm", 
+  "move_only_right_arm", 
+  "open_both_hands", 
+  "open_hand", 
+  "play_gesture", 
+  "player", 
+  "poll_webapp_loop", 
+  "prepare_gesture_recording", 
+  "qi", 
+  "reconnect_interval", 
+  "recorder", 
+  "recording", 
+  "refresh_obstacles", 
+  "refresh_protections", 
+  "refresh_temperatures", 
+  "request_reconnect", 
+  "reset_safety_counts", 
+  "rest", 
+  "restore_protections", 
+  "robot", 
+  "robot_connected", 
+  "robot_ip", 
+  "robot_port", 
+  "run_frames_gesture", 
+  "running", 
+  "safety", 
+  "safety_counts", 
+  "safety_events", 
+  "say", 
+  "say_and_listen", 
+  "say_animated", 
+  "session", 
+  "set_autonomous_life", 
+  "set_error", 
+  "set_hand", 
+  "set_protection", 
+  "set_stiffness", 
+  "set_volume", 
+  "simulate_disconnect", 
+  "simulate_obstacle", 
+  "soft", 
+  "soft_hold_state", 
+  "speaking_movement", 
+  "speech", 
+  "start_soft_hold", 
+  "stop_soft_hold", 
+  "temperature_level", 
+  "tts", 
+  "validate_frame_pose", 
+  "volume_down", 
+  "volume_up", 
+  "wakeup", 
+  "webapp"
+ ]
+}

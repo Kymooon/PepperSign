@@ -95,10 +95,11 @@ docker-compose.override.yml
 # --------------------------
 # Docker
 # --------------------------
-# Dati runtime montati nei container
-data/
+# Dati runtime montati nei container (esclusi), tranne i segni registrati
+data/*
+!data/gestures/
 # SDK NAOqi (licenza: non ridistribuibile)
-Controll/docker/sdk/*.tar.gz
+1-Controll/docker/sdk/*.tar.gz
 
 # --------------------------
 # Archivio locale (codice e file storici, non versionati)

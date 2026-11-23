@@ -25,19 +25,19 @@ I dati restano sul PC, nelle cartelle montate come volumi:
 |---|---|---|
 | `data/media` | video e immagini degli scheletri | web, process |
 | `data/gestures` | gesture JSON registrate | controll |
-| `Process/VideoGeneration/checkpoints` | modelli DWPose `.onnx` | process |
-| `Process/VideoGeneration/assets` | video sorgente locali | process |
+| `2-Process/VideoGeneration/checkpoints` | modelli DWPose `.onnx` | process |
+| `2-Process/VideoGeneration/assets` | video sorgente locali | process |
 
 ## Requisiti
 
 - **Docker Desktop** (Windows/macOS) con backend WSL2, oppure Docker Engine con il plugin Compose (Linux).
 - Solo per la GPU: scheda NVIDIA con driver aggiornati (Windows) oppure NVIDIA Container Toolkit (Linux).
-- **SDK NAOqi Python 2.7 per Linux 64 bit**: vedi [Controll/docker/sdk/README.md](Controll/docker/sdk/README.md).
+- **SDK NAOqi Python 2.7 per Linux 64 bit**: vedi [1-Controll/docker/sdk/README.md](1-Controll/docker/sdk/README.md).
 
 ## Primo avvio
 
-1. **SDK NAOqi**: copia `pynaoqi-python2.7-<versione>-linux64-<data>.tar.gz` (in uso: 2.8.7.4) in `Controll/docker/sdk/`, senza estrarlo e senza prefissi nel nome.
-2. **Modelli DWPose** (opzionale): se hai già `yolox_l.onnx` e `dw-ll_ucoco_384.onnx`, lasciali in `Process/VideoGeneration/checkpoints/`. Se mancano, vengono scaricati automaticamente al primo avvio (~350 MB).
+1. **SDK NAOqi**: copia `pynaoqi-python2.7-<versione>-linux64-<data>.tar.gz` (in uso: 2.8.7.4) in `1-Controll/docker/sdk/`, senza estrarlo e senza prefissi nel nome.
+2. **Modelli DWPose** (opzionale): se hai già `yolox_l.onnx` e `dw-ll_ucoco_384.onnx`, lasciali in `2-Process/VideoGeneration/checkpoints/`. Se mancano, vengono scaricati automaticamente al primo avvio (~350 MB).
 3. **Configurazione**: copia `.env.example` in `.env` e imposta almeno:
    - `PEPPER_IP`: IP del robot;
    - `PEPPERSIGN_HOST`: IP di questo PC visto dal tablet (con l'hotspot di Windows di solito `192.168.137.1`). Con lo script di avvio non serve: lo rileva da solo;
@@ -87,7 +87,7 @@ PEPPERSIGN_FAKE_ROBOT=1
 
 e riavvia il controller con `docker compose up -d controll`, oppure con `avvia-peppersign.bat`.
 
-Il controller usa un **robot simulato** (`Controll/peppersign/fake_qi.py`) al posto dell'SDK NAOqi:
+Il controller usa un **robot simulato** (`1-Controll/peppersign/fake_qi.py`) al posto dell'SDK NAOqi:
 
 - la GUI su `http://localhost:6080` si apre subito e il titolo riporta *[DEMO - robot simulato]*;
 - ogni comando che arriva dalla WebApp (SAY, ANIMATED_SAY, PLAY_GESTURE…) e ogni azione dalla GUI compare nel log come `[DEMO] ALMotion.angleInterpolation(...)`, `[DEMO] ALTextToSpeech.say(...)`;
@@ -174,7 +174,7 @@ Il codice ora legge la configurazione da variabili d'ambiente. Se non sono impos
 
 ## Problemi noti e soluzioni
 
-- **La build di `controll` si ferma con "SDK NAOqi non trovato"**: manca il file in `Controll/docker/sdk/`.
+- **La build di `controll` si ferma con "SDK NAOqi non trovato"**: manca il file in `1-Controll/docker/sdk/`.
 - **La GUI su :6080 resta nera**: il controller sta aspettando il robot. Controlla `docker compose logs controll` e l'IP in `PEPPER_IP`.
 - **Il robot non è raggiungibile dal container, ma dal PC sì**: su Docker Desktop i container escono sulla rete tramite il PC, quindi di solito funziona. Se la rete del robot è l'hotspot di Windows, verifica che il firewall non blocchi il traffico di Docker/WSL. Su Linux si può aggiungere `network_mode: host` al servizio `controll`.
 - **Il tablet non raggiunge https://…:8443**: apri la porta 8443 nel firewall di Windows e verifica che `PEPPERSIGN_HOST` sia l'IP giusto.

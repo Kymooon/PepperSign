@@ -13,9 +13,9 @@ Rispetto a lavori simili, PepperSign si distingue per due aspetti:
 
 | Modulo | Cartella | Tecnologia | Ruolo |
 |---|---|---|---|
-| **Web** | [`Web/PepperWebApp`](Web/PepperWebApp) | Java 17, Jakarta Servlet (Tomcat 10.1), JSP, JavaScript ES5 | Interfaccia per tablet e PC, API REST, coda dei comandi per il robot |
-| **Process** | [`Process/VideoGeneration`](Process/VideoGeneration) | Python 3, Flask, DWPose (ONNX), Whisper, FFmpeg | Generazione degli scheletri, riconoscimento vocale, valutazione del gesto |
-| **Controll** | [`Controll`](Controll) | Python 2.7, SDK NAOqi, Tkinter | Pilotaggio di Pepper, registrazione ed esecuzione dei gesti |
+| **Web** | [`3-WebApp/PepperWebApp`](3-WebApp/PepperWebApp) | Java 17, Jakarta Servlet (Tomcat 10.1), JSP, JavaScript ES5 | Interfaccia per tablet e PC, API REST, coda dei comandi per il robot |
+| **Process** | [`2-Process/VideoGeneration`](2-Process/VideoGeneration) | Python 3, Flask, DWPose (ONNX), Whisper, FFmpeg | Generazione degli scheletri, riconoscimento vocale, valutazione del gesto |
+| **Controll** | [`1-Controll`](1-Controll) | Python 2.7, SDK NAOqi, Tkinter | Pilotaggio di Pepper, registrazione ed esecuzione dei gesti |
 
 ```
 Tablet / PC ──HTTPS──► Caddy ──► Web (Tomcat) ──HTTP──► Process (Flask: DWPose, Whisper)
@@ -40,7 +40,7 @@ cd PepperSign
 ```
 
 ### 3. Copiare l'SDK NAOqi (solo per il modulo Controll)
-L'SDK non è nel repository perché la licenza non ne consente la ridistribuzione. Copia il file `pynaoqi-python2.7-2.8.7.4-linux64-*.tar.gz` (versione **Linux 64 bit**, non quella Windows) in `Controll/docker/sdk/`, **senza estrarlo**. Dettagli in [Controll/docker/sdk/README.md](Controll/docker/sdk/README.md).
+L'SDK non è nel repository perché la licenza non ne consente la ridistribuzione. Copia il file `pynaoqi-python2.7-2.8.7.4-linux64-*.tar.gz` (versione **Linux 64 bit**, non quella Windows) in `1-Controll/docker/sdk/`, **senza estrarlo**. Dettagli in [1-Controll/docker/sdk/README.md](1-Controll/docker/sdk/README.md).
 
 > Se non hai l'SDK puoi comunque usare la WebApp e il servizio Python: vedi la variante "senza Controll" al passo 5.
 
@@ -86,6 +86,7 @@ Tutti i container devono risultare *running*, e `process` deve risultare *health
 
 - Al primo accesso in HTTPS il browser mostra un avviso sul certificato: va accettato. L'HTTPS serve perché il tablet possa usare microfono e webcam.
 - Se il tablet non si collega, apri la porta **8443** nel firewall di Windows.
+- Se cambia la rete (ad esempio passando all'hotspot del telefono), cambia anche l'IP del PC: avvia sempre con `avvia-peppersign.bat`, così il certificato HTTPS viene creato per il nuovo indirizzo. Con un semplice `docker compose restart` resterebbe quello del vecchio IP. Al primo accesso il tablet chiederà di nuovo di accettare il certificato.
 
 ### 8. Uso quotidiano
 | Azione | Comando |
@@ -107,25 +108,22 @@ PepperSign/
 ├── .env.example                  modello di configurazione (copiare in .env)
 ├── avvia-peppersign.bat / .ps1   avvio su Windows con rilevamento dell'IP
 ├── docker/caddy/Caddyfile        proxy HTTPS
-├── docs/                         report di analisi e di sistema
-├── Controll/                     modulo robot (Python 2.7)
-├── Process/                      modulo di elaborazione (Python 3)
-├── Web/                          modulo web (Java)
+├── 1-Controll/                   modulo robot (Python 2.7)
+├── 2-Process/                    modulo di elaborazione (Python 3)
+├── 3-WebApp/                     modulo web (Java)
 └── data/                         dati runtime: video generati, gesture (non versionati)
 ```
 
 ## Documentazione
 
 - [DOCKER.md](DOCKER.md): installazione, avvio, configurazione, problemi noti
-- [docs/PepperSign_Report_Sistema.md](docs/PepperSign_Report_Sistema.md): architettura attuale, stato dei problemi, prossimi passi
-- [docs/PepperSign_Analisi_Codice.md](docs/PepperSign_Analisi_Codice.md): prima analisi del codice
-- README dei moduli: [Controll](Controll/README.md), [Process](Process/README.md)
+- README dei moduli: [Controll](1-Controll/README.md), [Process](2-Process/README.md)
 
 ## File non presenti nella repository
 
 | File | Dove metterlo |
 |---|---|
 | `.env` | copia di `.env.example` |
-| SDK NAOqi Linux (`pynaoqi-python2.7-*-linux64*.tar.gz`) | `Controll/docker/sdk/` (licenza: non ridistribuibile) |
-| Modelli DWPose (`yolox_l.onnx`, `dw-ll_ucoco_384.onnx`) | `Process/VideoGeneration/checkpoints/` (scaricati da soli se mancano) |
+| SDK NAOqi Linux (`pynaoqi-python2.7-*-linux64*.tar.gz`) | `1-Controll/docker/sdk/` (licenza: non ridistribuibile) |
+| Modelli DWPose (`yolox_l.onnx`, `dw-ll_ucoco_384.onnx`) | `2-Process/VideoGeneration/checkpoints/` (scaricati da soli se mancano) |
 | Video generati e gesture registrate | `data/media`, `data/gestures` |
